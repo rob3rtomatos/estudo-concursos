@@ -73,12 +73,12 @@ git status
 git add .
 
 # Criar o commit
-git commit -m "Estudo Concursos"
+git commit -m "Estudo Concursos_v1"
 
 # Enviar para o repositório remoto
 git push origin ajustes-lay-out
 git add .
-git commit -m "107/107 ✅ — todos os testes passando!"
+git commit -m "107/107 testes ✅ — Estudo Concursos_v1!"
 git push origin main
 
 
