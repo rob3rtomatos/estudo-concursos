@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app     = require('../../src/app');
-const { clearTables } = require('../setup/testDb');
+const { clearTables, closePool } = require('../setup/testDb');
 
 let tokenA, tokenB, materiaIdA;
 

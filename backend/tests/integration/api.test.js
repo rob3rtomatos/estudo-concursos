@@ -3,6 +3,7 @@
  * Exige banco de dados ativo (rodar dentro do Docker)
  */
 
+const { closePool } = require('../setup/testDb');
 const request = require('supertest');
 const app     = require('../../src/app');
 
@@ -240,4 +241,10 @@ describe('Notificações', () => {
     expect(Array.isArray(res.body.notificacoes)).toBe(true);
     expect(typeof res.body.naoLidas).toBe('number');
   });
+});
+
+afterAll(async () => {
+  await closePool();
+  const { pool: appPool } = require('../../src/utils/db');
+  await appPool.end().catch(() => {});
 });

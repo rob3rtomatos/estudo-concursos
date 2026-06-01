@@ -109,3 +109,8 @@ git push
 
 
 http://localhost:3000/dashboard 
+
+
+# A partir de agora, sempre que adicionar migrations ou alterar schema em study_db, basta rodar
+
+backend/run-tests.sh

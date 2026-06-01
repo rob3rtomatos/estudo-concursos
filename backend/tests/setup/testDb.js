@@ -97,4 +97,8 @@ async function clearTables() {
   `);
 }
 
-module.exports = { pool, setupSchema, clearTables };
+async function closePool() {
+  await pool.end();
+}
+
+module.exports = { pool, setupSchema, clearTables, closePool };
