@@ -25,7 +25,7 @@ beforeAll(async () => {
   const m = await request(app).post('/api/materias')
     .set('Authorization', `Bearer ${tokenA}`)
     .send({ nome: 'Matéria Privada', cor: '#6366f1' });
-  materiaIdA = m.body.id;
+  materiaIdA = m.body.materia?.id || m.body.id;
 });
 afterAll(async () => { await clearTables(); });
 
@@ -38,7 +38,7 @@ describe('[OWASP A01] Broken Access Control', () => {
   });
 
   test('Usuário B não pode ver dashboard do Usuário A', async () => {
-    const res = await request(app).get('/api/dashboard')
+    const res = await request(app).get('/api/dashboard/resumo')
       .set('Authorization', `Bearer ${tokenB}`);
     // Deve retornar dados APENAS do usuário B
     expect(res.status).toBe(200);
@@ -106,7 +106,7 @@ describe('[OWASP A03] Injection', () => {
       .set('Authorization', `Bearer ${tokenA}`)
       .send({ nome: xss, cor: '#6366f1' });
     if (res.status === 201) {
-      expect(res.body.nome).toBe(xss); // armazenado, não executado
+      expect(res.body.materia?.nome || res.body.nome).toBe(xss); // armazenado, não executado
     } else {
       expect([400, 422]).toContain(res.status); // ou rejeitado
     }
@@ -137,7 +137,7 @@ describe('[OWASP A04] Insecure Design', () => {
     const m = await request(app).post('/api/materias')
       .set('Authorization', `Bearer ${tokenA}`)
       .send({ nome: 'Mat Teste', cor: '#6366f1' });
-    const res = await request(app).post('/api/registro')
+    const res = await request(app).post('/api/registros')
       .set('Authorization', `Bearer ${tokenA}`)
       .send({ materia_id: m.body.id, data_estudo: '2026-06-01', horas_estudadas: -5 });
     expect([400, 422]).toContain(res.status);
@@ -197,7 +197,7 @@ describe('[OWASP A07] Authentication Failures', () => {
 // ── A08: Software and Data Integrity Failures ────────────────────
 describe('[OWASP A08] Data Integrity', () => {
   test('materia_id de outro usuário é rejeitado no registro', async () => {
-    const res = await request(app).post('/api/registro')
+    const res = await request(app).post('/api/registros')
       .set('Authorization', `Bearer ${tokenB}`)
       .send({ materia_id: materiaIdA, data_estudo: '2026-06-01', horas_estudadas: 1 });
     expect([400, 403, 404, 422]).toContain(res.status);
@@ -221,7 +221,7 @@ describe('[OWASP A09] Logging', () => {
         .send({ email: 'brute@force.com', senha: `tentativa${i}` });
     }
     // Após 5 tentativas, API ainda responde
-    const res = await request(app).get('/api/dashboard')
+    const res = await request(app).get('/api/dashboard/resumo')
       .set('Authorization', `Bearer ${tokenA}`);
     expect(res.status).toBe(200);
   });

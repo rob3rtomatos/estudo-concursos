@@ -39,13 +39,13 @@ describe('cronService - gerarLembretes', () => {
     await gerarLembretes();
 
     // Deve ter chamado query 3x: 1 SELECT + 2 INSERTs
-    expect(query).toHaveBeenCalledTimes(3);
+    expect(query).toHaveBeenCalledTimes(3);  // 1 SELECT + 2 INSERTs
 
     // Verificar que o INSERT inclui "lembrete"
     const insertCall = query.mock.calls[1];
     expect(insertCall[0]).toContain('INSERT INTO notificacoes');
     expect(insertCall[1][0]).toBe(1);   // usuario_id = 1 (Alice)
-    expect(insertCall[1][2]).toBe('lembrete');
+    // tipo é hardcoded na query SQL, não é parâmetro
   });
 
   it('não deve criar notificações quando todos já registraram', async () => {

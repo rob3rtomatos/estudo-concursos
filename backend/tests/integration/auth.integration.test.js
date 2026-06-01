@@ -7,11 +7,13 @@ afterAll(async () => { await clearTables(); });
 
 describe('[INTEGRATION] Auth', () => {
   const user = { nome: 'Teste User', email: 'teste@teste.com', senha: 'Senha@123' };
+  let token;
 
   test('POST /api/auth/registro - cadastro válido retorna 201', async () => {
     const res = await request(app).post('/api/auth/registro').send(user);
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty('token');
+    token = res.body.token;
   });
 
   test('POST /api/auth/registro - email duplicado retorna 409', async () => {
@@ -24,6 +26,7 @@ describe('[INTEGRATION] Auth', () => {
       .send({ email: user.email, senha: user.senha });
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('token');
+    token = res.body.token;
   });
 
   test('POST /api/auth/login - senha errada retorna 401', async () => {
@@ -38,11 +41,9 @@ describe('[INTEGRATION] Auth', () => {
   });
 
   test('GET /api/auth/me - token válido retorna dados do usuário', async () => {
-    const login = await request(app).post('/api/auth/login')
-      .send({ email: user.email, senha: user.senha });
     const res = await request(app).get('/api/auth/me')
-      .set('Authorization', `Bearer ${login.body.token}`);
+      .set('Authorization', `Bearer ${token}`);
     expect(res.status).toBe(200);
-    expect(res.body.email).toBe(user.email);
+    expect(res.body.usuario?.email || res.body.email).toBe(user.email);
   });
 });
