@@ -45,32 +45,32 @@ function ModalQuestao({ questao, materias, bancas, onSalvar, onFechar }) {
   const overlay = {
     position:'fixed', inset:0, background:'rgba(0,0,0,0.5)',
     zIndex:300, display:'flex', alignItems:'flex-start',
-    justifyContent:'center', overflowY:'auto', padding:'2rem 1rem'
+    justifyContent:'center', overflowY:'auto', padding:'var(--sp-4)'
   };
   const modal = {
     background:'var(--bg-secondary)', borderRadius:'1rem',
     border:'1px solid var(--border)', width:'100%', maxWidth:700,
-    padding:'2rem', boxShadow:'0 20px 60px rgba(0,0,0,0.3)'
+    padding:'var(--sp-6)', boxShadow:'var(--shadow-lg)'
   };
 
   return (
     <div style={overlay} onClick={e => e.target === e.currentTarget && onFechar()}>
       <div style={modal}>
         <div style={{ display:'flex', justifyContent:'space-between',
-          alignItems:'center', marginBottom:'1.5rem' }}>
-          <h3 style={{ fontWeight:700, fontSize:'1.1rem' }}>
+          alignItems:'center', marginBottom:'var(--sp-5)' }}>
+          <h3 style={{ fontWeight:700, fontSize:'0.95rem' }}>
             {editando ? '✏️ Editar Questão' : '➕ Nova Questão'}
           </h3>
           <button onClick={onFechar} style={{ background:'none', border:'none',
-            cursor:'pointer', fontSize:'1.2rem', color:'var(--text-secondary)' }}>✕</button>
+            cursor:'pointer', fontSize:'0.95rem', color:'var(--text-secondary)' }}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           {/* Linha 1: Matéria + Banca + Ano + Dificuldade */}
           <div style={{ display:'grid', gridTemplateColumns:'2fr 1.5fr 1fr 1fr',
-            gap:'0.75rem', marginBottom:'0.875rem' }}>
+            gap:'var(--sp-3)', marginBottom:'var(--sp-3)' }}>
             <div>
-              <label style={lbl}>Matéria</label>
+              <label className='form-label'>Matéria</label>
               <select className="input-field" value={form.materia_id}
                 onChange={e => set('materia_id', e.target.value)}>
                 <option value="">— Sem matéria —</option>
@@ -78,7 +78,7 @@ function ModalQuestao({ questao, materias, bancas, onSalvar, onFechar }) {
               </select>
             </div>
             <div>
-              <label style={lbl}>Banca</label>
+              <label className='form-label'>Banca</label>
               <input list="bancas-list" className="input-field"
                 placeholder="CESPE, FCC..." value={form.banca}
                 onChange={e => set('banca', e.target.value)} />
@@ -87,13 +87,13 @@ function ModalQuestao({ questao, materias, bancas, onSalvar, onFechar }) {
               </datalist>
             </div>
             <div>
-              <label style={lbl}>Ano</label>
+              <label className='form-label'>Ano</label>
               <input type="number" className="input-field"
                 placeholder="2023" min="1990" max="2030"
                 value={form.ano} onChange={e => set('ano', e.target.value)} />
             </div>
             <div>
-              <label style={lbl}>Dificuldade</label>
+              <label className='form-label'>Dificuldade</label>
               <select className="input-field" value={form.dificuldade}
                 onChange={e => set('dificuldade', e.target.value)}>
                 {DIFICULDADES.map(d => <option key={d} value={d}>
@@ -104,8 +104,8 @@ function ModalQuestao({ questao, materias, bancas, onSalvar, onFechar }) {
           </div>
 
           {/* Enunciado */}
-          <div style={{ marginBottom:'0.875rem' }}>
-            <label style={lbl}>Enunciado *</label>
+          <div style={{ marginBottom:'var(--sp-3)' }}>
+            <label className='form-label'>Enunciado *</label>
             <textarea className="input-field" rows={4} required
               placeholder="Digite o enunciado da questão..."
               value={form.enunciado} onChange={e => set('enunciado', e.target.value)}
@@ -113,18 +113,18 @@ function ModalQuestao({ questao, materias, bancas, onSalvar, onFechar }) {
           </div>
 
           {/* Alternativas */}
-          <div style={{ marginBottom:'0.875rem' }}>
-            <label style={lbl}>Alternativas</label>
+          <div style={{ marginBottom:'var(--sp-3)' }}>
+            <label className='form-label'>Alternativas</label>
             {LETRAS.map(l => (
-              <div key={l} style={{ display:'flex', gap:'0.5rem',
+              <div key={l} style={{ display:'flex', gap:'var(--sp-2)',
                 alignItems:'center', marginBottom:'0.4rem' }}>
                 <div style={{
                   width:28, height:28, borderRadius:'50%', flexShrink:0,
                   background: form.gabarito === l ? 'var(--accent)' : 'var(--border)',
                   color: form.gabarito === l ? 'white' : 'var(--text-secondary)',
                   display:'flex', alignItems:'center', justifyContent:'center',
-                  fontWeight:700, fontSize:'0.8rem', cursor:'pointer',
-                  transition:'all 0.15s'
+                  fontWeight:700, fontSize:'0.875rem', cursor:'pointer',
+                  transition:'all var(--transition)'
                 }} onClick={() => set('gabarito', form.gabarito === l ? '' : l)}>
                   {l}
                 </div>
@@ -134,24 +134,24 @@ function ModalQuestao({ questao, materias, bancas, onSalvar, onFechar }) {
                   onChange={e => set(`alternativa_${l.toLowerCase()}`, e.target.value)} />
               </div>
             ))}
-            <p style={{ fontSize:'0.72rem', color:'var(--text-secondary)', marginTop:4 }}>
+            <p style={{ fontSize:'0.72rem', color:'var(--text-secondary)', marginTop:'var(--sp-1)' }}>
               Clique na letra para marcar o gabarito
             </p>
           </div>
 
           {/* Comentário */}
-          <div style={{ marginBottom:'1.25rem' }}>
-            <label style={lbl}>💬 Comentário / Explicação</label>
+          <div style={{ marginBottom:'var(--sp-5)' }}>
+            <label className='form-label'>💬 Comentário / Explicação</label>
             <textarea className="input-field" rows={3}
               placeholder="Comentário sobre a questão, dicas, macetes..."
               value={form.comentario} onChange={e => set('comentario', e.target.value)}
               style={{ resize:'vertical' }} />
           </div>
 
-          <div style={{ display:'flex', gap:'0.75rem', justifyContent:'flex-end' }}>
+          <div style={{ display:'flex', gap:'var(--sp-3)', justifyContent:'flex-end' }}>
             <button type="button" onClick={onFechar}
               style={{ background:'var(--border)', color:'var(--text-primary)',
-                border:'none', borderRadius:'0.5rem', padding:'0.6rem 1.25rem',
+                border:'none', borderRadius:'var(--radius)', padding:'0.6rem 1.25rem',
                 cursor:'pointer', fontWeight:600 }}>
               Cancelar
             </button>
@@ -165,7 +165,7 @@ function ModalQuestao({ questao, materias, bancas, onSalvar, onFechar }) {
   );
 }
 
-const lbl = { fontSize:'0.78rem', color:'var(--text-secondary)', display:'block', marginBottom:4 };
+const lbl = { fontSize:'0.75rem', color:'var(--text-secondary)', display:'block', marginBottom:'var(--sp-1)' };
 
 /* ── Página principal ── */
 export default function Questoes() {
@@ -221,7 +221,7 @@ export default function Questoes() {
   const COR = { facil:'#22c55e', media:'#f59e0b', dificil:'#ef4444' };
 
   return (
-    <div className="fade-in">
+    <div className="page-wrapper">
       {modal && (
         <ModalQuestao
           questao={modal === 'novo' ? null : modal}
@@ -231,10 +231,10 @@ export default function Questoes() {
       )}
 
       <div style={{ display:'flex', justifyContent:'space-between',
-        alignItems:'center', marginBottom:'1rem' }}>
-        <h2 style={{ fontSize:'1.4rem', fontWeight:700, color:'var(--text-primary)' }}>
+        alignItems:'center', marginBottom:'var(--sp-4)' }}>
+        <h2 className='page-title'>
           📝 Questões
-          <span style={{ marginLeft:8, fontSize:'0.85rem', fontWeight:400,
+          <span style={{ marginLeft:8, fontSize:'0.875rem', fontWeight:400,
             color:'var(--text-secondary)' }}>
             ({pag.total} no total)
           </span>
@@ -247,11 +247,11 @@ export default function Questoes() {
       <BarraProgresso />
 
       {/* Filtros */}
-      <div className="card" style={{ marginBottom:'1rem',
-        display:'grid', gridTemplateColumns:'2fr 1.5fr 1fr 2fr', gap:'0.75rem',
+      <div className="card" style={{ marginBottom:'var(--sp-4)',
+        display:'grid', gridTemplateColumns:'2fr 1.5fr 1fr 2fr', gap:'var(--sp-3)',
         padding:'1rem' }}>
         <div>
-          <label style={lbl}>Banca</label>
+          <label className='form-label'>Banca</label>
           <select className="input-field" value={filtros.banca}
             onChange={e => setFiltros(p => ({ ...p, banca: e.target.value }))}>
             <option value="">Todas as bancas</option>
@@ -259,7 +259,7 @@ export default function Questoes() {
           </select>
         </div>
         <div>
-          <label style={lbl}>Matéria</label>
+          <label className='form-label'>Matéria</label>
           <select className="input-field" value={filtros.materia_id}
             onChange={e => setFiltros(p => ({ ...p, materia_id: e.target.value }))}>
             <option value="">Todas</option>
@@ -267,7 +267,7 @@ export default function Questoes() {
           </select>
         </div>
         <div>
-          <label style={lbl}>Dificuldade</label>
+          <label className='form-label'>Dificuldade</label>
           <select className="input-field" value={filtros.dificuldade}
             onChange={e => setFiltros(p => ({ ...p, dificuldade: e.target.value }))}>
             <option value="">Todas</option>
@@ -277,7 +277,7 @@ export default function Questoes() {
           </select>
         </div>
         <div>
-          <label style={lbl}>Buscar no enunciado</label>
+          <label className='form-label'>Buscar no enunciado</label>
           <input type="text" className="input-field"
             placeholder="🔍 Pesquisar..."
             value={filtros.busca}
@@ -301,19 +301,19 @@ export default function Questoes() {
         </div>
       ) : (
         <>
-          <div style={{ display:'flex', flexDirection:'column', gap:'0.75rem' }}>
+          <div style={{ display:'flex', flexDirection:'column', gap:'var(--sp-3)' }}>
             {questoes.map(q => (
               <div key={q.id} className="card" style={{ padding:'1rem 1.25rem' }}>
                 <div style={{ display:'flex', justifyContent:'space-between',
-                  alignItems:'flex-start', gap:'1rem' }}>
+                  alignItems:'flex-start', gap:'var(--sp-3)' }}>
                   {/* Info principal */}
                   <div style={{ flex:1, minWidth:0 }}>
                     {/* Tags */}
-                    <div style={{ display:'flex', flexWrap:'wrap', gap:'0.4rem', marginBottom:8 }}>
+                    <div style={{ display:'flex', flexWrap:'wrap', gap:'var(--sp-2)', marginBottom:'var(--sp-2)' }}>
                       {q.materia_nome && (
                         <span style={{ background:`${q.materia_cor}20`,
                           color: q.materia_cor, borderRadius:999,
-                          padding:'0.15rem 0.6rem', fontSize:'0.7rem', fontWeight:600,
+                          padding:'0.25rem 0.6rem', fontSize:'0.7rem', fontWeight:600,
                           border:`1px solid ${q.materia_cor}40` }}>
                           {q.materia_nome}
                         </span>
@@ -321,14 +321,14 @@ export default function Questoes() {
                       {q.banca && (
                         <span style={{ background:'var(--bg-primary)',
                           border:'1px solid var(--border)', borderRadius:999,
-                          padding:'0.15rem 0.6rem', fontSize:'0.7rem',
+                          padding:'0.25rem 0.6rem', fontSize:'0.7rem',
                           color:'var(--text-secondary)' }}>
                           {q.banca}{q.ano ? ` · ${q.ano}` : ''}
                         </span>
                       )}
                       <span style={{ background:`${COR[q.dificuldade]}20`,
                         color: COR[q.dificuldade], borderRadius:999,
-                        padding:'0.15rem 0.6rem', fontSize:'0.7rem', fontWeight:600 }}>
+                        padding:'0.25rem 0.6rem', fontSize:'0.7rem', fontWeight:600 }}>
                         {q.dificuldade}
                       </span>
                     </div>
@@ -347,7 +347,7 @@ export default function Questoes() {
                       <div style={{ marginTop:'0.875rem' }}>
                         {LETRAS.filter(l => q[`alternativa_${l.toLowerCase()}`]).map(l => (
                           <div key={l} style={{
-                            display:'flex', gap:'0.6rem', alignItems:'flex-start',
+                            display:'flex', gap:'var(--sp-3)', alignItems:'flex-start',
                             padding:'0.3rem 0', borderBottom:'1px solid var(--border)'
                           }}>
                             <span style={{
@@ -357,28 +357,28 @@ export default function Questoes() {
                               display:'flex', alignItems:'center', justifyContent:'center',
                               fontSize:'0.72rem', fontWeight:700
                             }}>{l}</span>
-                            <span style={{ fontSize:'0.82rem',
+                            <span style={{ fontSize:'0.875rem',
                               color:'var(--text-primary)', lineHeight:1.5 }}>
                               {q[`alternativa_${l.toLowerCase()}`]}
                             </span>
                           </div>
                         ))}
                         {q.gabarito && (
-                          <div style={{ marginTop:8, padding:'0.5rem 0.75rem',
+                          <div style={{ marginTop:8, padding:'var(--sp-2) var(--sp-3)',
                             background:'rgba(34,197,94,0.1)', borderRadius:'0.375rem',
-                            fontSize:'0.8rem', color:'#22c55e', fontWeight:600 }}>
+                            fontSize:'0.875rem', color:'#22c55e', fontWeight:600 }}>
                             ✓ Gabarito: {q.gabarito}
                           </div>
                         )}
                         {q.comentario && (
                           <div style={{ marginTop:'0.75rem', padding:'0.75rem',
-                            background:'var(--bg-primary)', borderRadius:'0.5rem',
+                            background:'var(--bg-primary)', borderRadius:'var(--radius)',
                             border:'1px solid var(--border)' }}>
                             <div style={{ fontSize:'0.72rem', fontWeight:700,
-                              color:'var(--text-secondary)', marginBottom:4 }}>
+                              color:'var(--text-secondary)', marginBottom:'var(--sp-1)' }}>
                               💬 COMENTÁRIO
                             </div>
-                            <p style={{ fontSize:'0.82rem', lineHeight:1.6,
+                            <p style={{ fontSize:'0.875rem', lineHeight:1.6,
                               color:'var(--text-primary)' }}>{q.comentario}</p>
                           </div>
                         )}
@@ -387,24 +387,24 @@ export default function Questoes() {
 
                     <button onClick={() => setDetalhe(detalhe === q.id ? null : q.id)}
                       style={{ background:'none', border:'none', cursor:'pointer',
-                        color:'var(--accent)', fontSize:'0.75rem', marginTop:4,
+                        color:'var(--accent)', fontSize:'0.75rem', marginTop:'var(--sp-1)',
                         padding:0, fontWeight:600 }}>
                       {detalhe === q.id ? '▲ Recolher' : '▼ Ver detalhes'}
                     </button>
                   </div>
 
                   {/* Ações */}
-                  <div style={{ display:'flex', gap:'0.4rem', flexShrink:0 }}>
+                  <div style={{ display:'flex', gap:'var(--sp-2)', flexShrink:0 }}>
                     <button onClick={() => setModal(q)}
                       style={{ background:'none', border:'1px solid var(--border)',
                         color:'var(--text-secondary)', borderRadius:'0.375rem',
-                        padding:'0.35rem 0.6rem', cursor:'pointer', fontSize:'0.8rem' }}>
+                        padding:'0.25rem 0.6rem', cursor:'pointer', fontSize:'0.875rem' }}>
                       ✏️
                     </button>
                     <button onClick={() => remover(q.id)}
                       style={{ background:'none', border:'1px solid var(--danger)',
                         color:'var(--danger)', borderRadius:'0.375rem',
-                        padding:'0.35rem 0.6rem', cursor:'pointer', fontSize:'0.8rem' }}>
+                        padding:'0.25rem 0.6rem', cursor:'pointer', fontSize:'0.875rem' }}>
                       🗑️
                     </button>
                   </div>
@@ -415,7 +415,7 @@ export default function Questoes() {
 
           {/* Paginação */}
           {pag.pages > 1 && (
-            <div style={{ display:'flex', justifyContent:'center', gap:'0.5rem',
+            <div style={{ display:'flex', justifyContent:'center', gap:'var(--sp-2)',
               marginTop:'1.5rem' }}>
               {Array.from({ length: pag.pages }, (_, i) => i + 1).map(p => (
                 <button key={p} onClick={() => carregar(p)}

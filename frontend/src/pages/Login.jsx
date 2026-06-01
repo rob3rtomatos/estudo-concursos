@@ -5,9 +5,9 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 
 export default function Login() {
-  const { login } = useAuth();
-  const navigate  = useNavigate();
-  const [form, setForm]     = useState({ email: '', senha: '' });
+  const { login }   = useAuth();
+  const navigate    = useNavigate();
+  const [form, setForm]       = useState({ email: '', senha: '' });
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
@@ -26,62 +26,80 @@ export default function Login() {
   }
 
   return (
-    <div style={{
-      minHeight: '100vh', background: 'var(--bg-primary)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center'
-    }}>
-      <div className="card" style={{ width: '100%', maxWidth: 420 }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '2rem' }}>📚</h1>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-            Estudo Concursos
-          </h2>
-          <p style={{ color: 'var(--text-secondary)', marginTop: 4 }}>
-            Entre na sua conta
-          </p>
+    <div className="auth-container">
+      <div className="auth-card scale-in">
+
+        {/* Logo / Título */}
+        <div className="auth-logo">
+          <span style={{ fontSize:'2.25rem', lineHeight:1 }}>📚</span>
+          <div style={{ textAlign:'center' }}>
+            <h1 style={{
+              fontSize:'1.5rem', fontWeight:800,
+              color:'var(--text-primary)', letterSpacing:'-0.02em'
+            }}>
+              Estudo Concursos
+            </h1>
+            <p style={{ color:'var(--text-secondary)', fontSize:'0.875rem', marginTop:'var(--sp-1)' }}>
+              Entre na sua conta para continuar
+            </p>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div>
-            <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
-              Email
-            </label>
+        {/* Formulário */}
+        <form onSubmit={handleSubmit} className="auth-fields">
+
+          <div className="form-group">
+            <label className="form-label" htmlFor="email">Email</label>
             <input
+              id="email"
               type="email"
               className="input-field"
               placeholder="seu@email.com"
               value={form.email}
               onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+              autoComplete="email"
               required
             />
           </div>
 
-          <div>
-            <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
-              Senha
-            </label>
+          <div className="form-group">
+            <label className="form-label" htmlFor="senha">Senha</label>
             <input
+              id="senha"
               type="password"
               className="input-field"
               placeholder="••••••••"
               value={form.senha}
               onChange={e => setForm(p => ({ ...p, senha: e.target.value }))}
+              autoComplete="current-password"
               required
             />
           </div>
 
-          <button type="submit" className="btn-primary" disabled={loading}
-            style={{ marginTop: '0.5rem' }}>
-            {loading ? 'Entrando...' : 'Entrar'}
+          <button
+            type="submit"
+            className="btn-primary auth-submit"
+            disabled={loading}
+            style={{ width:'100%', justifyContent:'center', minHeight:44 }}
+          >
+            {loading
+              ? <><span className="spinner" style={{ width:16, height:16, borderWidth:2 }} /> Entrando...</>
+              : 'Entrar'}
           </button>
+
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+        {/* Rodapé */}
+        <p className="auth-footer">
           Não tem conta?{' '}
-          <Link to="/registro" style={{ color: '#6366f1', textDecoration: 'none', fontWeight: 600 }}>
+          <Link
+            to="/registro"
+            style={{ color:'var(--accent)', fontWeight:700 }}
+          >
             Criar conta
           </Link>
         </p>
+
       </div>
     </div>
   );

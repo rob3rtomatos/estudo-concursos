@@ -78,7 +78,7 @@ git commit -m "Estudo Concursos"
 # Enviar para o repositório remoto
 git push origin nome-da-branch
 git add .
-git commit -m "Adiciona tela de metas e corrige navegação"
+git commit -m "Plataforma ok"
 git push origin main
 
 
@@ -103,7 +103,9 @@ git diff
 git push -u origin nome-da-branch
 
 
-
 git add .
-git commit -m "Inserção do Keycloak"
+git commit -m "Estudo Concursos_v1"
 git push
+
+
+http://localhost:3000/dashboard 

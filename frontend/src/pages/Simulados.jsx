@@ -56,47 +56,47 @@ function ModalSimulado({ simulado, questoesDisponiveis, onSalvar, onFechar }) {
   const overlay = {
     position:'fixed', inset:0, background:'rgba(0,0,0,0.55)',
     zIndex:300, display:'flex', alignItems:'flex-start',
-    justifyContent:'center', overflowY:'auto', padding:'2rem 1rem'
+    justifyContent:'center', overflowY:'auto', padding:'var(--sp-4)'
   };
   const modal = {
     background:'var(--bg-secondary)', borderRadius:'1rem',
     border:'1px solid var(--border)', width:'100%', maxWidth:750,
-    padding:'2rem', boxShadow:'0 20px 60px rgba(0,0,0,0.3)'
+    padding:'var(--sp-6)', boxShadow:'var(--shadow-lg)'
   };
-  const lbl = { fontSize:'0.78rem', color:'var(--text-secondary)', display:'block', marginBottom:4 };
+  const lbl = { fontSize:'0.75rem', color:'var(--text-secondary)', display:'block', marginBottom:'var(--sp-1)' };
 
   return (
     <div style={overlay} onClick={e => e.target === e.currentTarget && onFechar()}>
       <div style={modal}>
         <div style={{ display:'flex', justifyContent:'space-between',
-          alignItems:'center', marginBottom:'1.5rem' }}>
-          <h3 style={{ fontWeight:700, fontSize:'1.1rem' }}>
+          alignItems:'center', marginBottom:'var(--sp-5)' }}>
+          <h3 style={{ fontWeight:700, fontSize:'0.95rem' }}>
             {editando ? '✏️ Editar Simulado' : '➕ Novo Simulado'}
           </h3>
           <button onClick={onFechar} style={{ background:'none', border:'none',
-            cursor:'pointer', fontSize:'1.2rem', color:'var(--text-secondary)' }}>✕</button>
+            cursor:'pointer', fontSize:'0.95rem', color:'var(--text-secondary)' }}>✕</button>
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div style={{ display:'grid', gridTemplateColumns:'3fr 1fr', gap:'0.75rem',
-            marginBottom:'0.875rem' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:'var(--sp-3)',
+            marginBottom:'var(--sp-3)' }}>
             <div>
-              <label style={lbl}>Título do Simulado *</label>
+              <label className='form-label'>Título do Simulado *</label>
               <input type="text" className="input-field" required
                 placeholder="Ex: Simulado CESPE - Banco de Dados"
                 value={form.titulo}
                 onChange={e => setForm(p => ({ ...p, titulo: e.target.value }))} />
             </div>
             <div>
-              <label style={lbl}>Tempo (min)</label>
+              <label className='form-label'>Tempo (min)</label>
               <input type="number" className="input-field"
                 min="10" max="360" value={form.tempo_min}
                 onChange={e => setForm(p => ({ ...p, tempo_min: +e.target.value }))} />
             </div>
           </div>
 
-          <div style={{ marginBottom:'1rem' }}>
-            <label style={lbl}>Descrição</label>
+          <div style={{ marginBottom:'var(--sp-4)' }}>
+            <label className='form-label'>Descrição</label>
             <textarea className="input-field" rows={2}
               placeholder="Descrição opcional do simulado..."
               value={form.descricao}
@@ -107,8 +107,8 @@ function ModalSimulado({ simulado, questoesDisponiveis, onSalvar, onFechar }) {
           {/* Seleção de questões */}
           <div>
             <div style={{ display:'flex', justifyContent:'space-between',
-              alignItems:'center', marginBottom:8 }}>
-              <label style={{ ...lbl, marginBottom:0 }}>
+              alignItems:'center', marginBottom:'var(--sp-2)' }}>
+              <label className='form-label' style={{ marginBottom:0 }}>
                 Questões ({form.questao_ids.length} selecionadas)
               </label>
               <input type="text" className="input-field" placeholder="🔍 Filtrar questões..."
@@ -117,29 +117,29 @@ function ModalSimulado({ simulado, questoesDisponiveis, onSalvar, onFechar }) {
             </div>
 
             <div style={{ maxHeight:280, overflowY:'auto',
-              border:'1px solid var(--border)', borderRadius:'0.5rem' }}>
+              border:'1px solid var(--border)', borderRadius:'var(--radius)' }}>
               {questoesFiltradas.length === 0 ? (
                 <div style={{ padding:'1.5rem', textAlign:'center',
-                  color:'var(--text-secondary)', fontSize:'0.85rem' }}>
+                  color:'var(--text-secondary)', fontSize:'0.875rem' }}>
                   Nenhuma questão encontrada. Crie questões primeiro.
                 </div>
               ) : questoesFiltradas.map(q => {
                 const sel = form.questao_ids.includes(q.id);
                 return (
                   <div key={q.id} onClick={() => toggleQuestao(q.id)} style={{
-                    display:'flex', gap:'0.75rem', alignItems:'flex-start',
-                    padding:'0.7rem 1rem', cursor:'pointer',
+                    display:'flex', gap:'var(--sp-3)', alignItems:'flex-start',
+                    padding:'var(--sp-2) var(--sp-4)', cursor:'pointer',
                     background: sel ? 'rgba(99,102,241,0.08)' : 'transparent',
                     borderBottom:'1px solid var(--border)',
                     borderLeft: sel ? '3px solid var(--accent)' : '3px solid transparent',
-                    transition:'all 0.15s'
+                    transition:'all var(--transition)'
                   }}>
                     <div style={{
                       width:20, height:20, borderRadius:'0.25rem', flexShrink:0,
                       border: sel ? 'none' : '2px solid var(--border)',
                       background: sel ? 'var(--accent)' : 'transparent',
                       display:'flex', alignItems:'center', justifyContent:'center',
-                      color:'white', fontSize:'0.75rem', marginTop:2
+                      color:'white', fontSize:'0.75rem', marginTop:'var(--sp-1)'
                     }}>
                       {sel && '✓'}
                     </div>
@@ -152,8 +152,8 @@ function ModalSimulado({ simulado, questoesDisponiveis, onSalvar, onFechar }) {
                         <span style={{ fontSize:'0.68rem',
                           color:'var(--text-secondary)' }}>{q.banca}</span>
                       )}
-                      <p style={{ fontSize:'0.8rem', color:'var(--text-primary)',
-                        marginTop:2, overflow:'hidden', textOverflow:'ellipsis',
+                      <p style={{ fontSize:'0.875rem', color:'var(--text-primary)',
+                        marginTop:'var(--sp-1)', overflow:'hidden', textOverflow:'ellipsis',
                         display:'-webkit-box', WebkitLineClamp:1,
                         WebkitBoxOrient:'vertical' }}>
                         {q.enunciado}
@@ -165,11 +165,11 @@ function ModalSimulado({ simulado, questoesDisponiveis, onSalvar, onFechar }) {
             </div>
           </div>
 
-          <div style={{ display:'flex', gap:'0.75rem', justifyContent:'flex-end',
+          <div style={{ display:'flex', gap:'var(--sp-3)', justifyContent:'flex-end',
             marginTop:'1.5rem' }}>
             <button type="button" onClick={onFechar}
               style={{ background:'var(--border)', color:'var(--text-primary)',
-                border:'none', borderRadius:'0.5rem', padding:'0.6rem 1.25rem',
+                border:'none', borderRadius:'var(--radius)', padding:'0.6rem 1.25rem',
                 cursor:'pointer', fontWeight:600 }}>
               Cancelar
             </button>
@@ -220,27 +220,27 @@ function ModalRealizar({ simulado, onFechar }) {
   const overlay = {
     position:'fixed', inset:0, background:'rgba(0,0,0,0.6)',
     zIndex:300, display:'flex', alignItems:'flex-start',
-    justifyContent:'center', overflowY:'auto', padding:'2rem 1rem'
+    justifyContent:'center', overflowY:'auto', padding:'var(--sp-4)'
   };
   const modal = {
     background:'var(--bg-secondary)', borderRadius:'1rem',
     border:'1px solid var(--border)', width:'100%', maxWidth:760,
-    padding:'2rem', boxShadow:'0 20px 60px rgba(0,0,0,0.3)'
+    padding:'var(--sp-6)', boxShadow:'var(--shadow-lg)'
   };
 
   return (
     <div style={overlay} onClick={e => e.target === e.currentTarget && onFechar()}>
       <div style={modal}>
         <div style={{ display:'flex', justifyContent:'space-between',
-          alignItems:'center', marginBottom:'1rem' }}>
+          alignItems:'center', marginBottom:'var(--sp-4)' }}>
           <div>
-            <h3 style={{ fontWeight:700, fontSize:'1.1rem' }}>{simulado.titulo}</h3>
-            <p style={{ fontSize:'0.78rem', color:'var(--text-secondary)', marginTop:2 }}>
+            <h3 style={{ fontWeight:700, fontSize:'0.95rem' }}>{simulado.titulo}</h3>
+            <p style={{ fontSize:'0.75rem', color:'var(--text-secondary)', marginTop:'var(--sp-1)' }}>
               {simulado.questoes.length} questões · {simulado.tempo_min} minutos
             </p>
           </div>
           <button onClick={onFechar} style={{ background:'none', border:'none',
-            cursor:'pointer', fontSize:'1.2rem', color:'var(--text-secondary)' }}>✕</button>
+            cursor:'pointer', fontSize:'0.95rem', color:'var(--text-secondary)' }}>✕</button>
         </div>
 
         {/* Resultado */}
@@ -248,7 +248,7 @@ function ModalRealizar({ simulado, onFechar }) {
           <div style={{
             background: resultado.percentual >= 60 ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)',
             border: `1px solid ${resultado.percentual >= 60 ? '#22c55e' : '#ef4444'}`,
-            borderRadius:'0.75rem', padding:'1rem', marginBottom:'1.5rem', textAlign:'center'
+            borderRadius:'var(--radius-lg)', padding:'1rem', marginBottom:'var(--sp-5)', textAlign:'center'
           }}>
             <div style={{ fontSize:'2.5rem', fontWeight:800,
               color: resultado.percentual >= 60 ? '#22c55e' : '#ef4444' }}>
@@ -257,7 +257,7 @@ function ModalRealizar({ simulado, onFechar }) {
             <div style={{ color:'var(--text-primary)', fontWeight:600 }}>
               {resultado.acertos} de {resultado.total} questões corretas
             </div>
-            <div style={{ fontSize:'0.78rem', color:'var(--text-secondary)', marginTop:4 }}>
+            <div style={{ fontSize:'0.75rem', color:'var(--text-secondary)', marginTop:'var(--sp-1)' }}>
               {resultado.percentual >= 70 ? '🎉 Excelente!' :
                resultado.percentual >= 50 ? '👍 Bom resultado!' : '📚 Continue estudando!'}
             </div>
@@ -265,24 +265,24 @@ function ModalRealizar({ simulado, onFechar }) {
         )}
 
         {/* Questões */}
-        <div style={{ display:'flex', flexDirection:'column', gap:'1.25rem' }}>
+        <div style={{ display:'flex', flexDirection:'column', gap:'var(--sp-5)' }}>
           {simulado.questoes.map((q, idx) => {
             const resp    = respostas[q.id];
             const gabSel  = gabaritos[q.id];
             return (
               <div key={q.id} style={{
-                background:'var(--bg-primary)', borderRadius:'0.75rem',
+                background:'var(--bg-primary)', borderRadius:'var(--radius-lg)',
                 border:'1px solid var(--border)', padding:'1rem'
               }}>
                 {/* Cabeçalho */}
-                <div style={{ display:'flex', gap:'0.5rem', marginBottom:8,
+                <div style={{ display:'flex', gap:'var(--sp-2)', marginBottom:'var(--sp-2)',
                   flexWrap:'wrap', alignItems:'center' }}>
-                  <span style={{ fontWeight:700, fontSize:'0.9rem',
+                  <span style={{ fontWeight:700, fontSize:'0.875rem',
                     color:'var(--text-secondary)' }}>Q{idx + 1}</span>
                   {q.materia_nome && (
                     <span style={{ background:`${q.materia_cor}20`,
                       color: q.materia_cor, borderRadius:999,
-                      padding:'0.1rem 0.5rem', fontSize:'0.7rem', fontWeight:600 }}>
+                      padding:'0.25rem 0.6rem', fontSize:'0.7rem', fontWeight:600 }}>
                       {q.materia_nome}
                     </span>
                   )}
@@ -294,27 +294,27 @@ function ModalRealizar({ simulado, onFechar }) {
                 </div>
 
                 <p style={{ fontSize:'0.875rem', lineHeight:1.6,
-                  color:'var(--text-primary)', marginBottom:'0.875rem' }}>
+                  color:'var(--text-primary)', marginBottom:'var(--sp-3)' }}>
                   {q.enunciado}
                 </p>
 
                 {/* Alternativas */}
-                <div style={{ display:'flex', flexDirection:'column', gap:'0.4rem' }}>
+                <div style={{ display:'flex', flexDirection:'column', gap:'var(--sp-2)' }}>
                   {LETRAS.filter(l => q[`alternativa_${l.toLowerCase()}`]).map(l => {
                     const marcada = resp === l;
                     const certa   = resultado && gabSel === l;
                     const errada  = resultado && marcada && !certa;
                     return (
                       <div key={l} onClick={() => !resultado && marcar(q.id, l)} style={{
-                        display:'flex', gap:'0.6rem', alignItems:'flex-start',
-                        padding:'0.5rem 0.75rem', borderRadius:'0.5rem', cursor: resultado ? 'default' : 'pointer',
+                        display:'flex', gap:'var(--sp-3)', alignItems:'flex-start',
+                        padding:'var(--sp-2) var(--sp-3)', borderRadius:'var(--radius)', cursor: resultado ? 'default' : 'pointer',
                         border: certa ? '2px solid #22c55e' :
                                 errada ? '2px solid #ef4444' :
                                 marcada ? '2px solid var(--accent)' : '1px solid var(--border)',
                         background: certa ? 'rgba(34,197,94,0.08)' :
                                     errada ? 'rgba(239,68,68,0.08)' :
                                     marcada ? 'rgba(99,102,241,0.08)' : 'transparent',
-                        transition:'all 0.15s'
+                        transition:'all var(--transition)'
                       }}>
                         <span style={{
                           width:24, height:24, borderRadius:'50%', flexShrink:0,
@@ -324,7 +324,7 @@ function ModalRealizar({ simulado, onFechar }) {
                           color:'white', display:'flex', alignItems:'center',
                           justifyContent:'center', fontSize:'0.75rem', fontWeight:700
                         }}>{l}</span>
-                        <span style={{ fontSize:'0.82rem', lineHeight:1.5,
+                        <span style={{ fontSize:'0.875rem', lineHeight:1.5,
                           color:'var(--text-primary)' }}>
                           {q[`alternativa_${l.toLowerCase()}`]}
                         </span>
@@ -336,12 +336,12 @@ function ModalRealizar({ simulado, onFechar }) {
                 {/* Comentário após resultado */}
                 {resultado && q.comentario && (
                   <div style={{ marginTop:'0.75rem', padding:'0.75rem',
-                    background:'rgba(99,102,241,0.06)', borderRadius:'0.5rem',
+                    background:'rgba(99,102,241,0.06)', borderRadius:'var(--radius)',
                     border:'1px solid rgba(99,102,241,0.2)' }}>
                     <span style={{ fontSize:'0.72rem', fontWeight:700,
                       color:'var(--accent)' }}>💬 COMENTÁRIO</span>
-                    <p style={{ fontSize:'0.82rem', lineHeight:1.6,
-                      color:'var(--text-primary)', marginTop:4 }}>
+                    <p style={{ fontSize:'0.875rem', lineHeight:1.6,
+                      color:'var(--text-primary)', marginTop:'var(--sp-1)' }}>
                       {q.comentario}
                     </p>
                   </div>
@@ -355,7 +355,7 @@ function ModalRealizar({ simulado, onFechar }) {
         {!resultado && (
           <button onClick={finalizar} className="btn-primary"
             disabled={enviando}
-            style={{ width:'100%', marginTop:'1.5rem', padding:'0.875rem', fontSize:'1rem' }}>
+            style={{ width:'100%', marginTop:'1.5rem', padding:'0.875rem', fontSize:'0.875rem' }}>
             {enviando ? 'Corrigindo...' : '✅ Finalizar e Corrigir'}
           </button>
         )}
@@ -408,13 +408,13 @@ export default function Simulados() {
   }
 
   if (loading) return (
-    <div style={{ display:'flex', justifyContent:'center', padding:'3rem' }}>
-      <span style={{ color:'var(--text-secondary)' }}>Carregando...</span>
+    <div style={{ display:'flex', justifyContent:'center', alignItems:'center', padding:'3rem' }}>
+      <span className="spinner" />
     </div>
   );
 
   return (
-    <div className="fade-in">
+    <div className="page-wrapper">
       {modal && (
         <ModalSimulado
           simulado={modal === 'novo' ? null : modal}
@@ -428,14 +428,11 @@ export default function Simulados() {
           onFechar={() => setRealizando(null)} />
       )}
 
-      <div style={{ display:'flex', justifyContent:'space-between',
-        alignItems:'center', marginBottom:'1rem' }}>
-        <h2 style={{ fontSize:'1.4rem', fontWeight:700, color:'var(--text-primary)' }}>
+      <div className="page-header">
+        <h2 className="page-title">
           📋 Simulados
-          <span style={{ marginLeft:8, fontSize:'0.85rem', fontWeight:400,
-            color:'var(--text-secondary)' }}>
-            ({simulados.length} criados)
-          </span>
+          <span style={{ marginLeft:'var(--sp-2)', fontSize:'0.875rem', fontWeight:400,
+            color:'var(--text-secondary)' }}>({simulados.length} criados)</span>
         </h2>
         <button onClick={() => setModal('novo')} className="btn-primary">
           + Novo Simulado
@@ -445,52 +442,45 @@ export default function Simulados() {
       <BarraProgresso />
 
       {simulados.length === 0 ? (
-        <div className="card" style={{ textAlign:'center', padding:'3rem' }}>
-          <p style={{ fontSize:'3rem' }}>📋</p>
-          <p style={{ color:'var(--text-secondary)', marginTop:8 }}>
-            Nenhum simulado criado ainda
-          </p>
-          {questoes.length === 0 && (
-            <p style={{ fontSize:'0.8rem', color:'var(--text-secondary)', marginTop:4 }}>
-              Crie questões primeiro na página Questões
-            </p>
-          )}
-          <button onClick={() => setModal('novo')} className="btn-primary"
-            style={{ marginTop:'1rem' }}>
-            + Criar Simulado
-          </button>
+        <div className="card">
+          <div className="empty-state" style={{ padding:'3rem' }}>
+            <span className="empty-icon">📋</span>
+            <p>Nenhum simulado criado ainda{questoes.length===0 ? ' — crie questões primeiro' : ''}</p>
+            <button onClick={() => setModal('novo')} className="btn-primary"
+              style={{ marginTop:'var(--sp-4)' }}>+ Criar Simulado</button>
+          </div>
         </div>
       ) : (
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(320px,1fr))',
-          gap:'1rem' }}>
+          gap:'var(--sp-3)' }}>
           {simulados.map(s => (
-            <div key={s.id} className="card" style={{ padding:'1.25rem' }}>
+            <div key={s.id} className="card" style={{ padding:'var(--sp-5)' }}>
               {/* Header */}
-              <div style={{ marginBottom:'0.875rem' }}>
-                <h3 style={{ fontWeight:700, fontSize:'1rem', color:'var(--text-primary)',
-                  marginBottom:4 }}>{s.titulo}</h3>
+              <div style={{ marginBottom:'var(--sp-3)' }}>
+                <h3 style={{ fontWeight:700, fontSize:'0.875rem', color:'var(--text-primary)',
+                  marginBottom:'var(--sp-1)' }}>{s.titulo}</h3>
                 {s.descricao && (
-                  <p style={{ fontSize:'0.8rem', color:'var(--text-secondary)',
+                  <p style={{ fontSize:'0.875rem', color:'var(--text-secondary)',
                     lineHeight:1.5 }}>{s.descricao}</p>
                 )}
               </div>
 
               {/* Stats */}
-              <div style={{ display:'flex', gap:'1rem', marginBottom:'1rem' }}>
+              <div style={{ display:'flex', gap:'var(--sp-3)', marginBottom:'var(--sp-4)' }}>
                 <div style={{ textAlign:'center' }}>
-                  <div style={{ fontWeight:700, fontSize:'1.2rem', color:'var(--accent)' }}>
+                  <div style={{ fontWeight:700, fontSize:'0.95rem', color:'var(--accent)' }}>
                     {s.total_questoes}
                   </div>
                   <div style={{ fontSize:'0.7rem', color:'var(--text-secondary)' }}>Questões</div>
                 </div>
                 <div style={{ textAlign:'center' }}>
-                  <div style={{ fontWeight:700, fontSize:'1.2rem', color:'var(--text-primary)' }}>
+                  <div style={{ fontWeight:700, fontSize:'0.95rem', color:'var(--text-primary)' }}>
                     {s.tempo_min}
                   </div>
                   <div style={{ fontSize:'0.7rem', color:'var(--text-secondary)' }}>Minutos</div>
                 </div>
                 <div style={{ textAlign:'center' }}>
-                  <div style={{ fontWeight:700, fontSize:'1.2rem', color:'var(--text-primary)' }}>
+                  <div style={{ fontWeight:700, fontSize:'0.95rem', color:'var(--text-primary)' }}>
                     {new Date(s.criado_em).toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit' })}
                   </div>
                   <div style={{ fontSize:'0.7rem', color:'var(--text-secondary)' }}>Criado</div>
@@ -498,9 +488,9 @@ export default function Simulados() {
               </div>
 
               {/* Ações */}
-              <div style={{ display:'flex', gap:'0.5rem' }}>
+              <div style={{ display:'flex', gap:'var(--sp-2)' }}>
                 <button onClick={() => abrirSimulado(s)} className="btn-primary"
-                  style={{ flex:1, fontSize:'0.85rem', padding:'0.5rem' }}>
+                  style={{ flex:1, fontSize:'0.875rem', padding:'var(--sp-2) var(--sp-3)' }}>
                   ▶️ Realizar
                 </button>
                 <button onClick={() => {
@@ -508,15 +498,17 @@ export default function Simulados() {
                     .then(({ data }) => setModal(data.simulado))
                     .catch(() => toast.error('Erro ao carregar'));
                   }}
-                  style={{ background:'none', border:'1px solid var(--border)',
-                    color:'var(--text-secondary)', borderRadius:'0.5rem',
-                    padding:'0.5rem 0.75rem', cursor:'pointer', fontSize:'0.85rem' }}>
+                  className="btn-secondary"
+                  style={{ padding:'var(--sp-2) var(--sp-3)' }}>
                   ✏️
                 </button>
                 <button onClick={() => remover(s.id)}
-                  style={{ background:'none', border:'1px solid var(--danger)',
-                    color:'var(--danger)', borderRadius:'0.5rem',
-                    padding:'0.5rem 0.75rem', cursor:'pointer', fontSize:'0.85rem' }}>
+                  style={{ background:'none', border:'1px solid var(--border)',
+                    color:'var(--danger)', borderRadius:'var(--radius)',
+                    padding:'var(--sp-2) var(--sp-3)', cursor:'pointer', fontSize:'0.875rem',
+                    transition:'all var(--transition)' }}
+                  onMouseEnter={e=>{e.currentTarget.style.background='var(--danger-soft)';e.currentTarget.style.borderColor='var(--danger)'}}
+                  onMouseLeave={e=>{e.currentTarget.style.background='none';e.currentTarget.style.borderColor='var(--border)'}}>
                   🗑️
                 </button>
               </div>

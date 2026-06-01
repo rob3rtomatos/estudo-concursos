@@ -34,9 +34,9 @@ export default function BarraProgresso() {
       <div style={{
         background: 'var(--bg-secondary)',
         border: '1px solid var(--border)',
-        borderRadius: '0.625rem',
+        borderRadius: 'var(--radius-lg)',
         padding: '0.75rem 1rem',
-        marginBottom: '1.5rem',
+        marginBottom:'1.25rem',
         display: 'flex', alignItems: 'center', gap: '1rem',
         cursor: 'pointer', transition: 'box-shadow 0.2s',
         boxShadow: 'var(--shadow)'
@@ -60,7 +60,7 @@ export default function BarraProgresso() {
             </span>
           </div>
           {/* Barra */}
-          <div style={{ background: 'var(--border)', borderRadius: 999, height: 6, overflow: 'hidden' }}>
+          <div style={{ background: 'var(--border)', borderRadius: 99, height: 5, overflow: 'hidden' }}>
             <div style={{
               height: '100%', borderRadius: 999,
               background: cor, width: `${pct}%`,

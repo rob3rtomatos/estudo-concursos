@@ -205,25 +205,18 @@ export default function Relatorios() {
   }
 
   return (
-    <div className="fade-in">
-      <div style={{ display:'flex', justifyContent:'space-between',
-        alignItems:'center', marginBottom:'1rem' }}>
-        <h2 style={{ fontSize:'1.4rem', fontWeight:700, color:'var(--text-primary)' }}>
-          📊 Relatórios
-        </h2>
-        <div style={{ display:'flex', gap:'0.75rem' }}>
-          <button onClick={buscarDados} disabled={loading}
-            style={{ background:'var(--bg-secondary)', border:'1px solid var(--border)',
-              color:'var(--text-primary)', borderRadius:'0.5rem',
-              padding:'0.5rem 1rem', cursor: loading ? 'not-allowed' : 'pointer',
-              fontSize:'0.875rem', fontWeight:600, opacity: loading ? 0.7 : 1 }}>
-            {loading ? '⏳ Carregando...' : '🔄 Gerar Relatório'}
+    <div className="page-wrapper">
+      <div className="page-header">
+        <h2 className="page-title">📊 Relatórios</h2>
+        <div style={{ display:'flex', gap:'var(--sp-3)' }}>
+          <button onClick={buscarDados} disabled={loading} className="btn-secondary"
+            style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed':'pointer' }}>
+            {loading
+              ? <><span className="spinner" style={{width:14,height:14,borderWidth:2}}/> Carregando...</>
+              : '🔄 Gerar Relatório'}
           </button>
           {dados && (
-            <button onClick={gerarPDF} className="btn-primary"
-              style={{ display:'flex', alignItems:'center', gap:'0.4rem' }}>
-              ⬇️ Baixar PDF
-            </button>
+            <button onClick={gerarPDF} className="btn-primary">⬇️ Baixar PDF</button>
           )}
         </div>
       </div>
@@ -231,33 +224,34 @@ export default function Relatorios() {
       <BarraProgresso />
 
       {!dados ? (
-        <div className="card" style={{ textAlign:'center', padding:'4rem 2rem' }}>
-          <p style={{ fontSize:'4rem', marginBottom:'1rem' }}>📄</p>
-          <h3 style={{ fontWeight:700, fontSize:'1.2rem', marginBottom:'0.5rem',
-            color:'var(--text-primary)' }}>Gere seu Relatório Completo</h3>
-          <p style={{ color:'var(--text-secondary)', fontSize:'0.9rem',
-            maxWidth:480, margin:'0 auto 1.5rem', lineHeight:1.7 }}>
-            Consolida horas de estudo, ciclo semanal, cursos, questões,
-            simulados e cronômetro. Exportado em PDF com cabeçalho, rodapé
-            (data + e-mail) e paginação automática.
-          </p>
-          <button onClick={buscarDados} className="btn-primary"
-            disabled={loading} style={{ fontSize:'1rem', padding:'0.75rem 2rem' }}>
-            {loading ? '⏳ Gerando...' : '🚀 Gerar Agora'}
-          </button>
+        <div className="card">
+          <div className="empty-state" style={{ padding:'4rem 2rem' }}>
+            <span className="empty-icon">📄</span>
+            <h3 style={{ fontWeight:700, fontSize:'0.95rem', color:'var(--text-primary)' }}>
+              Gere seu Relatório Completo
+            </h3>
+            <p>Consolida horas de estudo, ciclo semanal, cursos, questões,
+              simulados e cronômetro. Exportado em PDF com cabeçalho, rodapé e paginação automática.</p>
+            <button onClick={buscarDados} className="btn-primary"
+              disabled={loading} style={{ marginTop:'var(--sp-4)' }}>
+              {loading
+                ? <><span className="spinner" style={{width:14,height:14,borderWidth:2}}/> Gerando...</>
+                : '🚀 Gerar Agora'}
+            </button>
+          </div>
         </div>
       ) : (
-        <div style={{ display:'flex', flexDirection:'column', gap:'1.25rem' }}>
+        <div style={{ display:'flex', flexDirection:'column', gap:'var(--sp-5)' }}>
           {/* Identificação */}
           <div className="card">
-            <h3 style={{ fontWeight:700, marginBottom:'1rem', fontSize:'1rem' }}>👤 Identificação</h3>
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'1rem' }}>
+            <h3 style={{ fontWeight:700, marginBottom:'1rem', fontSize:'0.875rem' }}>👤 Identificação</h3>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'0.75rem' }}>
               {[['Nome',dados.usuario.nome],['E-mail',dados.usuario.email],
                 ['Membro desde',fmtD(dados.usuario.criado_em)]].map(([l,v]) => (
                 <div key={l}>
                   <div style={{ fontSize:'0.72rem', color:'var(--text-secondary)',
                     fontWeight:600, textTransform:'uppercase',
-                    letterSpacing:'0.05em', marginBottom:2 }}>{l}</div>
+                    letterSpacing:'0.05em', marginBottom:'var(--sp-1)' }}>{l}</div>
                   <div style={{ fontWeight:600, color:'var(--text-primary)' }}>{v}</div>
                 </div>
               ))}
@@ -266,7 +260,7 @@ export default function Relatorios() {
 
           {/* Métricas */}
           <div style={{ display:'grid',
-            gridTemplateColumns:'repeat(auto-fit,minmax(150px,1fr))', gap:'1rem' }}>
+            gridTemplateColumns:'repeat(auto-fit,minmax(150px,1fr))', gap:'0.75rem' }}>
             {[
               ['⏱️','Total Horas',    `${dados.resumoEstudo.total_horas}h`, '#6366f1'],
               ['📅','Dias Estudados', dados.resumoEstudo.dias_estudados,    '#3b82f6'],
@@ -278,28 +272,32 @@ export default function Relatorios() {
                 pctMeta(dados)>=70?'#22c55e':'#f59e0b'],
               ['🏫','Bancas',         dados.questoes.bancas,                '#10b981']
             ].map(([icon,label,valor,cor]) => (
-              <div key={label} className="card" style={{ textAlign:'center', padding:'1rem' }}>
-                <div style={{ fontSize:'1.5rem', marginBottom:4 }}>{icon}</div>
-                <div style={{ fontSize:'1.3rem', fontWeight:700, color:cor }}>{valor}</div>
-                <div style={{ fontSize:'0.72rem', color:'var(--text-secondary)', marginTop:2 }}>
+              <div key={label} className="card"
+                style={{ textAlign:'center', padding:'var(--sp-4)', display:'flex',
+                  flexDirection:'column', alignItems:'center', gap:'var(--sp-2)' }}>
+                <span style={{ fontSize:'1.4rem', lineHeight:1 }}>{icon}</span>
+                <span style={{ fontSize:'1.4rem', fontWeight:800, color:cor,
+                  letterSpacing:'-0.03em', lineHeight:1 }}>{valor}</span>
+                <span style={{ fontSize:'0.7rem', color:'var(--text-secondary)',
+                  fontWeight:600, textTransform:'uppercase', letterSpacing:'0.04em' }}>
                   {label}
-                </div>
+                </span>
               </div>
             ))}
           </div>
 
           {/* Tabela: Horas por matéria */}
           {dados.porMateria.length > 0 && (
-            <div className="card">
-              <h3 style={{ fontWeight:700, marginBottom:'1rem', fontSize:'1rem' }}>
+            <div className="card content-card">
+              <h3 style={{ fontWeight:700, fontSize:'0.875rem', color:'var(--text-primary)' }}>
                 📚 Horas por Matéria
               </h3>
               <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'0.875rem' }}>
                 <thead>
                   <tr style={{ borderBottom:'2px solid var(--border)' }}>
                     {['Matéria','Horas','Dias'].map(h => (
-                      <th key={h} style={{ textAlign:'left', padding:'0.5rem',
-                        color:'var(--text-secondary)', fontWeight:600, fontSize:'0.78rem' }}>
+                      <th key={h} style={{ textAlign:'left', padding:'0.625rem 0.75rem',
+                        color:'var(--text-secondary)', fontWeight:600, fontSize:'0.75rem' }}>
                         {h}
                       </th>
                     ))}
@@ -308,15 +306,15 @@ export default function Relatorios() {
                 <tbody>
                   {dados.porMateria.map((m,i) => (
                     <tr key={i} style={{ borderBottom:'1px solid var(--border)' }}>
-                      <td style={{ padding:'0.5rem', display:'flex',
+                      <td style={{ padding:'0.625rem 0.75rem', display:'flex',
                         alignItems:'center', gap:'0.5rem' }}>
                         <span style={{ width:10, height:10, borderRadius:'50%',
                           background:m.cor, flexShrink:0, display:'inline-block' }} />
                         {m.nome}
                       </td>
-                      <td style={{ padding:'0.5rem', fontWeight:700,
+                      <td style={{ padding:'0.625rem 0.75rem', fontWeight:700,
                         color:'var(--accent)' }}>{m.total_horas}h</td>
-                      <td style={{ padding:'0.5rem',
+                      <td style={{ padding:'0.625rem 0.75rem',
                         color:'var(--text-secondary)' }}>{m.dias}</td>
                     </tr>
                   ))}
@@ -327,16 +325,16 @@ export default function Relatorios() {
 
           {/* Tabela: Cursos */}
           {dados.cursos.length > 0 && (
-            <div className="card">
-              <h3 style={{ fontWeight:700, marginBottom:'1rem', fontSize:'1rem' }}>
+            <div className="card content-card">
+              <h3 style={{ fontWeight:700, fontSize:'0.875rem', color:'var(--text-primary)' }}>
                 🎓 Cursos
               </h3>
               <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'0.875rem' }}>
                 <thead>
                   <tr style={{ borderBottom:'2px solid var(--border)' }}>
                     {['Curso','Plataforma','Progresso','Status'].map(h => (
-                      <th key={h} style={{ textAlign:'left', padding:'0.5rem',
-                        color:'var(--text-secondary)', fontWeight:600, fontSize:'0.78rem' }}>
+                      <th key={h} style={{ textAlign:'left', padding:'0.625rem 0.75rem',
+                        color:'var(--text-secondary)', fontWeight:600, fontSize:'0.75rem' }}>
                         {h}
                       </th>
                     ))}
@@ -345,22 +343,22 @@ export default function Relatorios() {
                 <tbody>
                   {dados.cursos.map((c,i) => (
                     <tr key={i} style={{ borderBottom:'1px solid var(--border)' }}>
-                      <td style={{ padding:'0.5rem', fontWeight:600 }}>{c.nome}</td>
-                      <td style={{ padding:'0.5rem',
+                      <td style={{ padding:'0.625rem 0.75rem', fontWeight:600 }}>{c.nome}</td>
+                      <td style={{ padding:'0.625rem 0.75rem',
                         color:'var(--text-secondary)' }}>{c.plataforma||'—'}</td>
-                      <td style={{ padding:'0.5rem' }}>
+                      <td style={{ padding:'0.625rem 0.75rem' }}>
                         <div style={{ display:'flex', alignItems:'center', gap:6 }}>
                           <div style={{ flex:1, background:'var(--border)',
                             borderRadius:999, height:6, overflow:'hidden', maxWidth:80 }}>
                             <div style={{ height:'100%', background:'var(--accent)',
                               width:`${c.progresso}%`, borderRadius:999 }} />
                           </div>
-                          <span style={{ fontSize:'0.78rem', fontWeight:600 }}>
+                          <span style={{ fontSize:'0.75rem', fontWeight:600 }}>
                             {c.progresso}%
                           </span>
                         </div>
                       </td>
-                      <td style={{ padding:'0.5rem' }}>{S_LBL[c.status]||c.status}</td>
+                      <td style={{ padding:'0.625rem 0.75rem' }}>{S_LBL[c.status]||c.status}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -368,14 +366,14 @@ export default function Relatorios() {
             </div>
           )}
 
-          <div className="card" style={{ textAlign:'center', padding:'2rem' }}>
+          <div className="card" style={{ textAlign:'center', padding:'var(--sp-8)' }}>
             <p style={{ color:'var(--text-secondary)', fontSize:'0.875rem',
               marginBottom:'1rem' }}>
               PDF com cabeçalho colorido, rodapé (data + <strong>{dados.usuario.email}</strong>)
               e paginação automática
             </p>
             <button onClick={gerarPDF} className="btn-primary"
-              style={{ fontSize:'1rem', padding:'0.875rem 2.5rem' }}>
+              style={{ fontSize:'0.875rem', padding:'0.875rem 2.5rem' }}>
               ⬇️ Baixar Relatório PDF
             </button>
           </div>

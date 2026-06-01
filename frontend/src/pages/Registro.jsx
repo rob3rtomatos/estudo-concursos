@@ -5,9 +5,9 @@ import api from '../services/api';
 import toast from 'react-hot-toast';
 
 export default function Registro() {
-  const { login } = useAuth();
-  const navigate  = useNavigate();
-  const [form, setForm]     = useState({ nome: '', email: '', senha: '' });
+  const { login }   = useAuth();
+  const navigate    = useNavigate();
+  const [form, setForm]       = useState({ nome: '', email: '', senha: '' });
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
@@ -29,53 +29,72 @@ export default function Registro() {
     }
   }
 
+  const FIELDS = [
+    { label:'Nome completo', name:'nome',  type:'text',     placeholder:'Seu nome completo', autoComplete:'name' },
+    { label:'Email',         name:'email', type:'email',    placeholder:'seu@email.com',      autoComplete:'email' },
+    { label:'Senha',         name:'senha', type:'password', placeholder:'Mínimo 6 caracteres',autoComplete:'new-password' },
+  ];
+
   return (
-    <div style={{
-      minHeight: '100vh', background: 'var(--bg-primary)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center'
-    }}>
-      <div className="card" style={{ width: '100%', maxWidth: 420 }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <h1 style={{ fontSize: '2rem' }}>🎓</h1>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Criar Conta</h2>
-          <p style={{ color: 'var(--text-secondary)', marginTop: 4 }}>
-            Comece a organizar seus estudos
-          </p>
+    <div className="auth-container">
+      <div className="auth-card scale-in">
+
+        {/* Logo / Título */}
+        <div className="auth-logo">
+          <span style={{ fontSize:'2.25rem', lineHeight:1 }}>🎓</span>
+          <div style={{ textAlign:'center' }}>
+            <h1 style={{
+              fontSize:'1.5rem', fontWeight:800,
+              color:'var(--text-primary)', letterSpacing:'-0.02em'
+            }}>
+              Criar Conta
+            </h1>
+            <p style={{ color:'var(--text-secondary)', fontSize:'0.875rem', marginTop:'var(--sp-1)' }}>
+              Comece a organizar seus estudos
+            </p>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          {[
-            { label: 'Nome completo', name: 'nome', type: 'text', placeholder: 'Seu nome' },
-            { label: 'Email',         name: 'email', type: 'email', placeholder: 'seu@email.com' },
-            { label: 'Senha',         name: 'senha', type: 'password', placeholder: 'Mínimo 6 caracteres' }
-          ].map(field => (
-            <div key={field.name}>
-              <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
+        {/* Formulário */}
+        <form onSubmit={handleSubmit} className="auth-fields">
+          {FIELDS.map(field => (
+            <div key={field.name} className="form-group">
+              <label className="form-label" htmlFor={field.name}>
                 {field.label}
               </label>
               <input
+                id={field.name}
                 type={field.type}
                 className="input-field"
                 placeholder={field.placeholder}
                 value={form[field.name]}
+                autoComplete={field.autoComplete}
                 onChange={e => setForm(p => ({ ...p, [field.name]: e.target.value }))}
                 required
               />
             </div>
           ))}
 
-          <button type="submit" className="btn-primary" disabled={loading}
-            style={{ marginTop: '0.5rem' }}>
-            {loading ? 'Criando...' : 'Criar Conta'}
+          <button
+            type="submit"
+            className="btn-primary auth-submit"
+            disabled={loading}
+            style={{ width:'100%', justifyContent:'center', minHeight:44 }}
+          >
+            {loading
+              ? <><span className="spinner" style={{ width:16, height:16, borderWidth:2 }} /> Criando...</>
+              : 'Criar Conta'}
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+        {/* Rodapé */}
+        <p className="auth-footer">
           Já tem conta?{' '}
-          <Link to="/login" style={{ color: '#6366f1', textDecoration: 'none', fontWeight: 600 }}>
+          <Link to="/login" style={{ color:'var(--accent)', fontWeight:700 }}>
             Fazer login
           </Link>
         </p>
+
       </div>
     </div>
   );

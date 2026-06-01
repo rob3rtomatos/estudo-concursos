@@ -53,31 +53,26 @@ function ModalCurso({ curso, materias, onSalvar, onFechar }) {
     } finally { setSalv(false); }
   }
 
-  const lbl = { fontSize:'0.78rem', color:'var(--text-secondary)', display:'block', marginBottom:4 };
+  const lbl = { fontSize:'0.75rem', color:'var(--text-secondary)', display:'block', marginBottom:'var(--sp-1)' };
 
   return (
     <div
-      style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.55)',
-        zIndex:300, display:'flex', alignItems:'flex-start',
-        justifyContent:'center', overflowY:'auto', padding:'2rem 1rem' }}
+      className="modal-overlay"
+      style={{ alignItems:'flex-start' }}
       onClick={e => e.target === e.currentTarget && onFechar()}
     >
-      <div style={{ background:'var(--bg-secondary)', borderRadius:'1rem',
-        border:'1px solid var(--border)', width:'100%', maxWidth:640,
-        padding:'2rem', boxShadow:'0 20px 60px rgba(0,0,0,0.3)' }}>
+      <div className="modal-box" style={{ maxWidth:640 }}>
 
-        <div style={{ display:'flex', justifyContent:'space-between',
-          alignItems:'center', marginBottom:'1.5rem' }}>
-          <h3 style={{ fontWeight:700, fontSize:'1.1rem' }}>
+        <div className="modal-header">
+          <span className="modal-title">
             {editando ? '✏️ Editar Curso' : '➕ Novo Curso'}
-          </h3>
-          <button onClick={onFechar} style={{ background:'none', border:'none',
-            cursor:'pointer', fontSize:'1.2rem', color:'var(--text-secondary)' }}>✕</button>
+          </span>
+          <button onClick={onFechar} className="modal-close">✕</button>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div style={{ display:'grid', gridTemplateColumns:'1fr auto',
-            gap:'0.75rem', marginBottom:'0.875rem', alignItems:'end' }}>
+            gap:'var(--sp-3)', marginBottom:'var(--sp-3)', alignItems:'end' }}>
             <div>
               <label style={lbl}>Nome do Curso *</label>
               <input type="text" className="input-field" required
@@ -89,12 +84,12 @@ function ModalCurso({ curso, materias, onSalvar, onFechar }) {
               <input type="color" value={form.cor}
                 onChange={e => set('cor', e.target.value)}
                 style={{ width:44, height:42, border:'1px solid var(--border)',
-                  borderRadius:'0.5rem', cursor:'pointer', padding:2 }} />
+                  borderRadius:'var(--radius)', cursor:'pointer', padding:2 }} />
             </div>
           </div>
 
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr',
-            gap:'0.75rem', marginBottom:'0.875rem' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',
+            gap:'var(--sp-3)', marginBottom:'var(--sp-3)' }}>
             <div>
               <label style={lbl}>Plataforma</label>
               <input type="text" className="input-field"
@@ -110,8 +105,8 @@ function ModalCurso({ curso, materias, onSalvar, onFechar }) {
             </div>
           </div>
 
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr',
-            gap:'0.75rem', marginBottom:'0.875rem' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))',
+            gap:'var(--sp-3)', marginBottom:'var(--sp-3)' }}>
             <div>
               <label style={lbl}>Status</label>
               <select className="input-field" value={form.status}
@@ -126,11 +121,11 @@ function ModalCurso({ curso, materias, onSalvar, onFechar }) {
               <input type="range" min="0" max="100" step="5"
                 value={form.progresso}
                 onChange={e => set('progresso', +e.target.value)}
-                style={{ width:'100%', accentColor: form.cor, marginTop:6 }} />
+                style={{ width:'100%', accentColor: form.cor, marginTop:'var(--sp-1)' }} />
             </div>
           </div>
 
-          <div style={{ marginBottom:'0.875rem' }}>
+          <div style={{ marginBottom:'var(--sp-3)' }}>
             <label style={lbl}>Descrição</label>
             <textarea className="input-field" rows={2}
               placeholder="Objetivos, conteúdo do curso..."
@@ -139,20 +134,20 @@ function ModalCurso({ curso, materias, onSalvar, onFechar }) {
           </div>
 
           {materias.length > 0 && (
-            <div style={{ marginBottom:'1.25rem' }}>
+            <div style={{ marginBottom:'var(--sp-5)' }}>
               <label style={lbl}>Matérias Relacionadas</label>
-              <div style={{ display:'flex', flexWrap:'wrap', gap:'0.4rem' }}>
+              <div style={{ display:'flex', flexWrap:'wrap', gap:'var(--sp-2)' }}>
                 {materias.map(m => {
                   const sel = form.materia_ids.includes(m.id);
                   return (
                     <div key={m.id} onClick={() => toggleMateria(m.id)} style={{
-                      display:'flex', alignItems:'center', gap:'0.3rem',
-                      padding:'0.3rem 0.7rem', borderRadius:999, cursor:'pointer',
+                      display:'flex', alignItems:'center', gap:'var(--sp-2)',
+                      padding:'0.35rem 0.875rem', borderRadius:999, cursor:'pointer',
                       border: sel ? `2px solid ${m.cor}` : '2px solid var(--border)',
                       background: sel ? `${m.cor}20` : 'var(--bg-primary)',
-                      fontSize:'0.78rem', fontWeight: sel ? 700 : 400,
+                      fontSize:'0.75rem', fontWeight: sel ? 700 : 400,
                       color: sel ? m.cor : 'var(--text-secondary)',
-                      transition:'all 0.15s'
+                      transition:'all var(--transition)'
                     }}>
                       <span style={{ width:8, height:8, borderRadius:'50%',
                         background: m.cor, display:'inline-block' }} />
@@ -164,15 +159,14 @@ function ModalCurso({ curso, materias, onSalvar, onFechar }) {
             </div>
           )}
 
-          <div style={{ display:'flex', gap:'0.75rem', justifyContent:'flex-end' }}>
-            <button type="button" onClick={onFechar}
-              style={{ background:'var(--border)', color:'var(--text-primary)',
-                border:'none', borderRadius:'0.5rem', padding:'0.6rem 1.25rem',
-                cursor:'pointer', fontWeight:600 }}>
+          <div className="form-actions">
+            <button type="button" onClick={onFechar} className="btn-secondary">
               Cancelar
             </button>
             <button type="submit" className="btn-primary" disabled={salvando}>
-              {salvando ? 'Salvando...' : editando ? '💾 Atualizar' : '✅ Criar Curso'}
+              {salvando
+                ? <><span className="spinner" style={{width:14,height:14,borderWidth:2}}/> Salvando...</>
+                : editando ? '💾 Atualizar' : '✅ Criar Curso'}
             </button>
           </div>
         </form>
@@ -184,15 +178,15 @@ function ModalCurso({ curso, materias, onSalvar, onFechar }) {
 function CardCurso({ curso, onEditar, onRemover }) {
   const st = STATUS_LABEL[curso.status] || STATUS_LABEL.em_andamento;
   return (
-    <div className="card" style={{ padding:'1.25rem', position:'relative', overflow:'hidden' }}>
+    <div className="card" style={{ padding:'var(--sp-5)', position:'relative', overflow:'hidden' }}>
       <div style={{ position:'absolute', top:0, left:0, right:0,
         height:4, background: curso.cor || '#6366f1' }} />
 
       <div style={{ display:'flex', justifyContent:'space-between',
-        alignItems:'flex-start', marginBottom:'0.75rem', marginTop:6 }}>
+        alignItems:'flex-start', marginBottom:'0.75rem', marginTop:'var(--sp-1)' }}>
         <div style={{ flex:1, minWidth:0 }}>
-          <h3 style={{ fontWeight:700, fontSize:'1rem', color:'var(--text-primary)',
-            marginBottom:2, overflow:'hidden', textOverflow:'ellipsis',
+          <h3 style={{ fontWeight:700, fontSize:'0.875rem', color:'var(--text-primary)',
+            marginBottom:'var(--sp-1)', overflow:'hidden', textOverflow:'ellipsis',
             whiteSpace:'nowrap' }}>{curso.nome}</h3>
           {curso.plataforma && (
             <span style={{ fontSize:'0.72rem', color:'var(--text-secondary)' }}>
@@ -202,13 +196,13 @@ function CardCurso({ curso, onEditar, onRemover }) {
         </div>
         <span style={{
           background:`${st.cor}20`, color: st.cor, borderRadius:999,
-          padding:'0.2rem 0.7rem', fontSize:'0.72rem', fontWeight:700,
+          padding:'0.25rem 0.6rem', fontSize:'0.72rem', fontWeight:700,
           flexShrink:0, marginLeft:8
         }}>{st.label}</span>
       </div>
 
-      <div style={{ marginBottom:'0.875rem' }}>
-        <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
+      <div style={{ marginBottom:'var(--sp-3)' }}>
+        <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'var(--sp-1)' }}>
           <span style={{ fontSize:'0.75rem', color:'var(--text-secondary)' }}>Progresso</span>
           <span style={{ fontSize:'0.75rem', fontWeight:700,
             color: curso.cor || '#6366f1' }}>{curso.progresso}%</span>
@@ -220,8 +214,8 @@ function CardCurso({ curso, onEditar, onRemover }) {
         </div>
       </div>
 
-      <div style={{ display:'flex', gap:'1rem', marginBottom:'0.875rem',
-        fontSize:'0.78rem' }}>
+      <div style={{ display:'flex', gap:'var(--sp-3)', marginBottom:'var(--sp-3)',
+        fontSize:'0.75rem' }}>
         {curso.carga_horaria > 0 && (
           <span style={{ color:'var(--text-secondary)' }}>⏱️ {curso.carga_horaria}h</span>
         )}
@@ -238,17 +232,18 @@ function CardCurso({ curso, onEditar, onRemover }) {
         )}
       </div>
 
-      <div style={{ display:'flex', gap:'0.5rem' }}>
-        <button onClick={() => onEditar(curso)}
-          style={{ flex:1, background:'none', border:'1px solid var(--border)',
-            color:'var(--text-secondary)', borderRadius:'0.5rem',
-            padding:'0.45rem', cursor:'pointer', fontSize:'0.82rem', fontWeight:600 }}>
+      <div style={{ display:'flex', gap:'var(--sp-2)' }}>
+        <button onClick={() => onEditar(curso)} className="btn-secondary"
+          style={{ flex:1, justifyContent:'center' }}>
           ✏️ Editar
         </button>
         <button onClick={() => onRemover(curso.id)}
-          style={{ background:'none', border:'1px solid var(--danger)',
-            color:'var(--danger)', borderRadius:'0.5rem',
-            padding:'0.45rem 0.7rem', cursor:'pointer', fontSize:'0.82rem' }}>
+          style={{ background:'none', border:'1px solid var(--border)',
+            color:'var(--danger)', borderRadius:'var(--radius)',
+            padding:'var(--sp-2) var(--sp-3)', cursor:'pointer', fontSize:'0.875rem',
+            transition:'all var(--transition)' }}
+          onMouseEnter={e=>{e.currentTarget.style.background='var(--danger-soft)';e.currentTarget.style.borderColor='var(--danger)'}}
+          onMouseLeave={e=>{e.currentTarget.style.background='none';e.currentTarget.style.borderColor='var(--border)'}}>
           🗑️
         </button>
       </div>
@@ -309,13 +304,13 @@ export default function MeusCursos() {
     : cursos.filter(c => c.status === filtro);
 
   if (loading) return (
-    <div style={{ display:'flex', justifyContent:'center', padding:'3rem' }}>
-      <span style={{ color:'var(--text-secondary)' }}>Carregando cursos...</span>
+    <div style={{ display:'flex', justifyContent:'center', alignItems:'center', padding:'3rem' }}>
+      <span className="spinner" />
     </div>
   );
 
   return (
-    <div className="fade-in">
+    <div className="page-wrapper">
       {modal && (
         <ModalCurso
           curso={modal === 'novo' ? null : modal}
@@ -324,18 +319,17 @@ export default function MeusCursos() {
           onFechar={() => setModal(null)} />
       )}
 
-      <div style={{ display:'flex', justifyContent:'space-between',
-        alignItems:'center', marginBottom:'1rem' }}>
-        <h2 style={{ fontSize:'1.4rem', fontWeight:700, color:'var(--text-primary)' }}>
+      <div className="page-header">
+        <h2 className="page-title">
           🎓 Meus Cursos
-          <span style={{ marginLeft:8, fontSize:'0.85rem', fontWeight:400,
+          <span style={{ marginLeft:'var(--sp-2)', fontSize:'0.875rem', fontWeight:400,
             color:'var(--text-secondary)' }}>({cursos.length} cursos)</span>
         </h2>
-        <div style={{ display:'flex', gap:'0.5rem' }}>
+        <div style={{ display:'flex', gap:'var(--sp-2)' }}>
           <button onClick={() => navigate('/relatorios')}
             style={{ background:'var(--bg-secondary)', border:'1px solid var(--border)',
-              color:'var(--text-primary)', borderRadius:'0.5rem',
-              padding:'0.5rem 0.875rem', cursor:'pointer', fontSize:'0.85rem', fontWeight:600 }}>
+              color:'var(--text-primary)', borderRadius:'var(--radius)',
+              padding:'0.5rem 0.875rem', cursor:'pointer', fontSize:'0.875rem', fontWeight:600 }}>
             📊 Relatório
           </button>
           <button onClick={() => setModal('novo')} className="btn-primary">
@@ -349,7 +343,7 @@ export default function MeusCursos() {
       {resumo && (
         <div style={{ display:'grid',
           gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',
-          gap:'1rem', marginBottom:'1.5rem' }}>
+          gap:'var(--sp-3)', marginBottom:'var(--sp-5)' }}>
           {[
             { icon:'📚', label:'Total',           valor: resumo.total,            cor:'#6366f1' },
             { icon:'▶️', label:'Em Andamento',    valor: resumo.em_andamento,     cor:'#f59e0b' },
@@ -357,41 +351,41 @@ export default function MeusCursos() {
             { icon:'⏱️', label:'Carga Total (h)', valor: resumo.carga_total,      cor:'#3b82f6' },
             { icon:'📈', label:'Progresso Médio', valor:`${resumo.progresso_medio || 0}%`, cor:'#8b5cf6' }
           ].map(c => (
-            <div key={c.label} className="card" style={{ textAlign:'center', padding:'1rem' }}>
-              <div style={{ fontSize:'1.5rem', marginBottom:4 }}>{c.icon}</div>
-              <div style={{ fontSize:'1.3rem', fontWeight:700, color:c.cor }}>{c.valor}</div>
-              <div style={{ fontSize:'0.72rem', color:'var(--text-secondary)', marginTop:2 }}>
+            <div key={c.label} className="card"
+            style={{ textAlign:'center', padding:'var(--sp-4)', display:'flex',
+              flexDirection:'column', alignItems:'center', gap:'var(--sp-2)' }}>
+              <span style={{ fontSize:'1.4rem', lineHeight:1 }}>{c.icon}</span>
+              <span style={{ fontSize:'1.4rem', fontWeight:800, color:c.cor,
+                letterSpacing:'-0.03em', lineHeight:1 }}>{c.valor}</span>
+              <span style={{ fontSize:'0.7rem', color:'var(--text-secondary)',
+                fontWeight:600, textTransform:'uppercase', letterSpacing:'0.04em' }}>
                 {c.label}
-              </div>
+              </span>
             </div>
           ))}
         </div>
       )}
 
-      <div style={{ display:'flex', gap:'0.5rem', marginBottom:'1.25rem', flexWrap:'wrap' }}>
+      <div className="pill-group">
         {[['todos','Todos'], ...Object.entries(STATUS_LABEL).map(([k,v])=>[k,v.label])].map(([k,label]) => (
-          <button key={k} onClick={() => setFiltro(k)} style={{
-            padding:'0.4rem 0.875rem', borderRadius:999, cursor:'pointer',
-            fontSize:'0.82rem', fontWeight:600, border:'none',
-            background: filtro===k ? 'var(--accent)' : 'var(--bg-secondary)',
-            color: filtro===k ? 'white' : 'var(--text-secondary)',
-            outline: filtro!==k ? '1px solid var(--border)' : 'none'
-          }}>{label}</button>
+          <button key={k} onClick={() => setFiltro(k)}
+            className={`pill${filtro===k ? ' ativo' : ''}`}>
+            {label}</button>
         ))}
       </div>
 
       {cursosFiltrados.length === 0 ? (
-        <div className="card" style={{ textAlign:'center', padding:'3rem' }}>
-          <p style={{ fontSize:'3rem' }}>🎓</p>
-          <p style={{ color:'var(--text-secondary)', marginTop:8 }}>
-            {filtro === 'todos' ? 'Nenhum curso cadastrado ainda' : `Sem cursos com status "${STATUS_LABEL[filtro]?.label}"`}
-          </p>
-          <button onClick={() => setModal('novo')} className="btn-primary"
-            style={{ marginTop:'1rem' }}>+ Criar Primeiro Curso</button>
+        <div className="card">
+          <div className="empty-state" style={{ padding:'3rem' }}>
+            <span className="empty-icon">🎓</span>
+            <p>{filtro === 'todos' ? 'Nenhum curso cadastrado ainda' : `Sem cursos com status "${STATUS_LABEL[filtro]?.label}"`}</p>
+            <button onClick={() => setModal('novo')} className="btn-primary"
+              style={{ marginTop:'var(--sp-4)' }}>+ Criar Primeiro Curso</button>
+          </div>
         </div>
       ) : (
         <div style={{ display:'grid',
-          gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:'1rem' }}>
+          gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))', gap:'var(--sp-3)' }}>
           {cursosFiltrados.map(c => (
             <CardCurso key={c.id} curso={c} onEditar={setModal} onRemover={onRemover} />
           ))}

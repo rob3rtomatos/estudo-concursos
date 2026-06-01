@@ -12,10 +12,7 @@ export default function Notificacoes() {
 
   function carregar() {
     api.get('/notificacoes?limite=50')
-      .then(({ data }) => {
-        setNotificacoes(data.notificacoes);
-        setNaoLidas(data.naoLidas);
-      })
+      .then(({ data }) => { setNotificacoes(data.notificacoes); setNaoLidas(data.naoLidas); })
       .catch(() => toast.error('Erro ao carregar notificações'))
       .finally(() => setLoading(false));
   }
@@ -31,7 +28,7 @@ export default function Notificacoes() {
   async function marcarLida(id) {
     try {
       await api.patch(`/notificacoes/${id}/lida`);
-      setNotificacoes(p => p.map(n => n.id === id ? { ...n, lida: true } : n));
+      setNotificacoes(p => p.map(n => n.id === id ? { ...n, lida:true } : n));
       setNaoLidas(p => Math.max(0, p - 1));
     } catch {}
   }
@@ -39,36 +36,38 @@ export default function Notificacoes() {
   async function marcarTodas() {
     try {
       await api.patch('/notificacoes/marcar-todas');
-      setNotificacoes(p => p.map(n => ({ ...n, lida: true })));
+      setNotificacoes(p => p.map(n => ({ ...n, lida:true })));
       setNaoLidas(0);
       toast.success('Todas marcadas como lidas');
     } catch {}
   }
 
   const fmt = iso => new Date(iso).toLocaleString('pt-BR', {
-    day:'2-digit', month:'2-digit', year:'numeric',
-    hour:'2-digit', minute:'2-digit'
+    day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'
   });
 
   if (loading) return (
-    <div style={{ display:'flex', justifyContent:'center', padding:'3rem' }}>
-      <span style={{ color:'var(--text-secondary)' }}>Carregando...</span>
+    <div style={{ display:'flex', justifyContent:'center', alignItems:'center', padding:'3rem' }}>
+      <span className="spinner" />
     </div>
   );
 
   return (
-    <div className="fade-in">
-      <div style={{ display:'flex', justifyContent:'space-between',
-        alignItems:'center', marginBottom:'1rem' }}>
-        <h2 style={{ fontSize:'1.4rem', fontWeight:700, color:'var(--text-primary)' }}>
+    <div className="page-wrapper">
+
+      <div className="page-header">
+        <h2 className="page-title">
           🔔 Notificações
           {naoLidas > 0 && (
-            <span className="badge-nao-lida" style={{ marginLeft:10 }}>{naoLidas}</span>
+            <span style={{
+              marginLeft:'var(--sp-2)', background:'var(--danger)', color:'#fff',
+              borderRadius:99, padding:'2px var(--sp-2)',
+              fontSize:'0.7rem', fontWeight:800,
+            }}>{naoLidas}</span>
           )}
         </h2>
         {naoLidas > 0 && (
-          <button onClick={marcarTodas} className="btn-primary"
-            style={{ fontSize:'0.8rem', padding:'0.4rem 1rem' }}>
+          <button onClick={marcarTodas} className="btn-secondary">
             ✓ Marcar todas como lidas
           </button>
         )}
@@ -77,39 +76,42 @@ export default function Notificacoes() {
       <BarraProgresso />
 
       {notificacoes.length === 0 ? (
-        <div className="card" style={{ textAlign:'center', padding:'3rem' }}>
-          <p style={{ fontSize:'3rem' }}>🎉</p>
-          <p style={{ color:'var(--text-secondary)', marginTop:8 }}>Nenhuma notificação</p>
+        <div className="card">
+          <div className="empty-state" style={{ padding:'3rem' }}>
+            <span className="empty-icon">🎉</span>
+            <p>Nenhuma notificação por enquanto</p>
+          </div>
         </div>
       ) : (
-        <div style={{ display:'flex', flexDirection:'column', gap:'0.75rem' }}>
+        <div style={{ display:'flex', flexDirection:'column', gap:'var(--sp-3)' }}>
           {notificacoes.map(n => (
             <div key={n.id} className="card" style={{
               display:'flex', justifyContent:'space-between', alignItems:'flex-start',
-              gap:'1rem', opacity: n.lida ? 0.55 : 1,
-              borderLeft: n.lida ? '3px solid var(--border)' : '3px solid var(--accent)',
-              padding:'1rem 1.25rem'
+              gap:'var(--sp-3)',
+              padding:'var(--sp-4) var(--sp-5)',
+              opacity: n.lida ? 0.55 : 1,
+              borderLeft: `3px solid ${n.lida ? 'var(--border)' : 'var(--accent)'}`,
+              transition:'opacity var(--transition)',
             }}>
-              <div style={{ display:'flex', gap:'0.75rem', flex:1 }}>
-                <span style={{ fontSize:'1.4rem', flexShrink:0 }}>
+              <div style={{ display:'flex', gap:'var(--sp-3)', flex:1, minWidth:0 }}>
+                <span style={{ fontSize:'1.3rem', flexShrink:0, lineHeight:1.4 }}>
                   {ICONES[n.tipo] || '🔔'}
                 </span>
-                <div>
-                  <p style={{ fontSize:'0.875rem', lineHeight:1.6,
-                    color:'var(--text-primary)' }}>{n.mensagem}</p>
-                  <p style={{ fontSize:'0.72rem', color:'var(--text-secondary)', marginTop:4 }}>
+                <div style={{ minWidth:0 }}>
+                  <p style={{ fontSize:'0.875rem', lineHeight:1.6, color:'var(--text-primary)' }}>
+                    {n.mensagem}
+                  </p>
+                  <p style={{ fontSize:'0.72rem', color:'var(--text-muted)', marginTop:'var(--sp-1)' }}>
                     {fmt(n.data_envio)}
                   </p>
                 </div>
               </div>
               {!n.lida && (
-                <button onClick={() => marcarLida(n.id)} style={{
-                  background:'none', border:'1px solid var(--border)',
-                  borderRadius:6, color:'var(--text-secondary)',
-                  cursor:'pointer', padding:'0.25rem 0.6rem',
-                  fontSize:'0.75rem', whiteSpace:'nowrap',
-                  transition:'border-color 0.2s'
-                }}>✓ Lida</button>
+                <button onClick={() => marcarLida(n.id)}
+                  className="btn-secondary"
+                  style={{ fontSize:'0.75rem', padding:'var(--sp-1) var(--sp-3)', flexShrink:0 }}>
+                  ✓ Lida
+                </button>
               )}
             </div>
           ))}

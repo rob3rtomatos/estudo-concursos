@@ -1,31 +1,21 @@
-/**
- * ThemeContext.jsx - Gerencia tema claro/escuro
- * Persiste preferência no localStorage
- */
-
 import { createContext, useContext, useState, useEffect } from 'react';
 
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  // Ler preferência salva (padrão: claro)
   const [tema, setTema] = useState(
-    () => localStorage.getItem('tema') || 'light'
+    () => localStorage.getItem('tema') || 'dark'
   );
 
-  // Aplicar atributo no <html> sempre que o tema mudar
   useEffect(() => {
-    const html = document.documentElement;
-    if (tema === 'dark') {
-      html.setAttribute('data-theme', 'dark');
-    } else {
-      html.removeAttribute('data-theme');
-    }
+    // SEMPRE setar o atributo — nunca remover
+    document.documentElement.setAttribute('data-theme', tema);
+    document.documentElement.style.colorScheme = tema === 'light' ? 'light' : 'dark';
     localStorage.setItem('tema', tema);
   }, [tema]);
 
   function alternarTema() {
-    setTema(t => t === 'light' ? 'dark' : 'light');
+    setTema(t => t === 'dark' ? 'light' : 'dark');
   }
 
   return (
