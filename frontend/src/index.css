@@ -472,3 +472,112 @@ tbody tr:hover td{background:var(--bg-elevated)}
   text-align:center;margin-top:var(--sp-5);
   font-size:0.875rem;color:var(--text-secondary);
 }
+
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVIDADE GLOBAL — smartphones e tablets
+   Atua via CSS puro, sem alterar lógica das páginas
+══════════════════════════════════════════════════ */
+
+/* ── Tabelas: scroll horizontal automático ── */
+table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+@media(min-width:768px){
+  table { display: table; overflow-x: visible; }
+}
+
+/* ── Grids inline das páginas → 1 coluna no mobile ── */
+@media(max-width:767px){
+  /* Qualquer grid inline com auto-fit colapsa para 1 col */
+  [style*="grid-template-columns"][style*="repeat"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Exceto grids de 2 itens pequenos (ex: stats do cronômetro) */
+  [style*="repeat(2,1fr)"],
+  [style*="repeat(3,1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Formulários: inputs em coluna */
+  .form-row { flex-direction: column; }
+  .form-row .form-group { min-width: 0; width: 100%; }
+
+  /* Botões de ação: full-width em formulários mobile */
+  .form-actions { flex-direction: column-reverse; }
+  .form-actions button { width: 100% !important; justify-content: center; }
+
+  /* Cabeçalho de página: empilhar em telas muito pequenas */
+  .page-header { flex-wrap: wrap; gap: var(--sp-3); }
+
+  /* Ocultar colunas secundárias de tabelas em mobile */
+  .table-hide-mobile { display: none !important; }
+
+  /* Modal: ocupar tela inteira no mobile */
+  .modal-overlay { padding: var(--sp-2); align-items: flex-end; }
+  .modal-box {
+    max-width: 100% !important;
+    width: 100%;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+    max-height: 92vh;
+    margin-bottom: 0;
+  }
+
+  /* Cards de métricas: mínimo 2 por linha */
+  .grid-metrics { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Texto de tabelas menor no mobile */
+  table { font-size: 0.8rem; }
+  td, th { padding: var(--sp-2) var(--sp-2) !important; }
+
+  /* Pill/tags: wrap */
+  .pill-group { gap: var(--sp-1); }
+
+  /* Progress bar texto */
+  .page-title { font-size: 1.05rem !important; }
+}
+
+/* ── Tablet (768–1023px) ── */
+@media(min-width:768px) and (max-width:1023px){
+  .grid-2col  { grid-template-columns: 1fr !important; }
+  .grid-3col  { grid-template-columns: repeat(2, 1fr) !important; }
+  .grid-metrics { grid-template-columns: repeat(3, 1fr) !important; }
+  .modal-box  { max-width: 90vw !important; }
+  .page-wrapper { padding: var(--sp-4) var(--sp-4); }
+}
+
+/* ── Touch targets mínimos (WCAG 2.5.5) ── */
+@media(hover:none) and (pointer:coarse){
+  button, a, select,
+  [role="button"] {
+    min-height: 44px;
+    min-width:  44px;
+  }
+  .nav-item { min-height: 48px !important; }
+  input[type="range"] { height: 36px; }
+}
+
+/* ── Evitar overflow horizontal global ── */
+@media(max-width:767px){
+  .page-wrapper,
+  .content-card,
+  .card { max-width: 100%; overflow-x: hidden; }
+
+  /* Textos longos não quebram layout */
+  .page-title,
+  h1, h2, h3 {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+/* ── Safe area iPhone (notch/home bar) ── */
+@supports(padding: env(safe-area-inset-bottom)){
+  .page-wrapper {
+    padding-bottom: calc(var(--sp-12) + env(safe-area-inset-bottom));
+  }
+}
+
