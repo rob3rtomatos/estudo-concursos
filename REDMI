@@ -114,3 +114,11 @@ http://localhost:3000/dashboard
 # A partir de agora, sempre que adicionar migrations ou alterar schema em study_db, basta rodar
 
 backend/run-tests.sh
+
+
+# Rodar toda a suíte (sync + testes)
+bash backend/run-tests.sh
+
+# Rodar apenas um arquivo específico
+bash backend/scripts/sync-test-db.sh && \
+docker exec backend_study sh -c "cd /app && npm test -- tests/integration/cursos.integration.test.js"
