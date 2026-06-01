@@ -76,7 +76,7 @@ git add .
 git commit -m "Estudo Concursos"
 
 # Enviar para o repositório remoto
-git push origin nome-da-branch
+git push origin ajustes-lay-out
 git add .
 git commit -m "Plataforma ok"
 git push origin main

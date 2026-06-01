@@ -29,7 +29,7 @@ export default function Dashboard() {
     </div>
   );
 
-  const { porDia, porMateria, metaSemanal, totalHoje, totalQuestoes, totalSimulados, ultimasQuestoes, ultimosSimulados } = dados || {};
+  const { porDia, porMateria, metaSemanal, totalHoje, totalQuestoes, totalSimulados, ultimasQuestoes, ultimosSimulados, resumoCursos, ultimosCursos } = dados || {};
 
   const pct = metaSemanal?.horas_planejadas > 0
     ? Math.min(100, Math.round((metaSemanal.horas_estudadas / metaSemanal.horas_planejadas) * 100))
@@ -194,6 +194,48 @@ export default function Dashboard() {
           ))}
         </div>
 
+
+        {/* Últimos cursos */}
+        {(ultimosCursos || []).length > 0 && (
+          <div className="card content-card">
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <h3 style={{ fontWeight:700, fontSize:'0.875rem', color:'var(--text-primary)' }}>🎓 Meus Cursos</h3>
+              <button onClick={() => navigate('/meus-cursos')}
+                style={{ background:'none', border:'none', color:'var(--accent)', cursor:'pointer', fontSize:'0.8rem', fontWeight:700 }}>
+                Ver todos →
+              </button>
+            </div>
+            {(ultimosCursos || []).map(c => (
+              <div key={c.id} style={{
+                padding:'var(--sp-3)', background:'var(--bg-elevated)',
+                borderRadius:'var(--radius)', border:'1px solid var(--border)',
+                borderLeft:`3px solid ${c.cor || 'var(--accent)'}`,
+              }}>
+                <div style={{ display:'flex', justifyContent:'space-between',
+                  alignItems:'center', marginBottom:'var(--sp-2)' }}>
+                  <span style={{ fontSize:'0.875rem', fontWeight:600,
+                    color:'var(--text-primary)', overflow:'hidden',
+                    textOverflow:'ellipsis', whiteSpace:'nowrap', maxWidth:'60%' }}>
+                    {c.nome}
+                  </span>
+                  <span style={{ fontSize:'0.72rem', fontWeight:700,
+                    color: c.cor || 'var(--accent)' }}>
+                    {c.progresso}%
+                  </span>
+                </div>
+                <div style={{ background:'var(--border)', borderRadius:99, height:5, overflow:'hidden' }}>
+                  <div style={{ height:'100%', borderRadius:99,
+                    background: c.cor || 'var(--accent)',
+                    width:`${c.progresso}%`, transition:'width 0.6s ease' }} />
+                </div>
+                {c.plataforma && (
+                  <div style={{ fontSize:'0.68rem', color:'var(--text-secondary)',
+                    marginTop:'var(--sp-1)' }}>🏫 {c.plataforma}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

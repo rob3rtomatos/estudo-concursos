@@ -42,27 +42,17 @@ function ModalQuestao({ questao, materias, bancas, onSalvar, onFechar }) {
     } catch {} finally { setSalv(false); }
   }
 
-  const overlay = {
-    position:'fixed', inset:0, background:'rgba(0,0,0,0.5)',
-    zIndex:300, display:'flex', alignItems:'flex-start',
-    justifyContent:'center', overflowY:'auto', padding:'var(--sp-4)'
-  };
-  const modal = {
-    background:'var(--bg-secondary)', borderRadius:'1rem',
-    border:'1px solid var(--border)', width:'100%', maxWidth:700,
-    padding:'var(--sp-6)', boxShadow:'var(--shadow-lg)'
-  };
+  const overlay = 'modal-overlay';
+  const modal   = { maxWidth:700 };
 
   return (
-    <div style={overlay} onClick={e => e.target === e.currentTarget && onFechar()}>
-      <div style={modal}>
-        <div style={{ display:'flex', justifyContent:'space-between',
-          alignItems:'center', marginBottom:'var(--sp-5)' }}>
+    <div className={overlay} onClick={e => e.target === e.currentTarget && onFechar()}>
+      <div className="modal-box" style={modal}>
+        <div className="modal-header">
           <h3 style={{ fontWeight:700, fontSize:'0.95rem' }}>
             {editando ? '✏️ Editar Questão' : '➕ Nova Questão'}
           </h3>
-          <button onClick={onFechar} style={{ background:'none', border:'none',
-            cursor:'pointer', fontSize:'0.95rem', color:'var(--text-secondary)' }}>✕</button>
+          <button onClick={onFechar} className="modal-close">✕</button>
         </div>
 
         <form onSubmit={handleSubmit}>

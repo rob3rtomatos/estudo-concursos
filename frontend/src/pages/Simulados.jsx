@@ -53,28 +53,18 @@ function ModalSimulado({ simulado, questoesDisponiveis, onSalvar, onFechar }) {
     } catch {} finally { setSalv(false); }
   }
 
-  const overlay = {
-    position:'fixed', inset:0, background:'rgba(0,0,0,0.55)',
-    zIndex:300, display:'flex', alignItems:'flex-start',
-    justifyContent:'center', overflowY:'auto', padding:'var(--sp-4)'
-  };
-  const modal = {
-    background:'var(--bg-secondary)', borderRadius:'1rem',
-    border:'1px solid var(--border)', width:'100%', maxWidth:750,
-    padding:'var(--sp-6)', boxShadow:'var(--shadow-lg)'
-  };
+  const overlay = 'modal-overlay';
+  const modal   = { maxWidth:750 };
   const lbl = { fontSize:'0.75rem', color:'var(--text-secondary)', display:'block', marginBottom:'var(--sp-1)' };
 
   return (
-    <div style={overlay} onClick={e => e.target === e.currentTarget && onFechar()}>
-      <div style={modal}>
-        <div style={{ display:'flex', justifyContent:'space-between',
-          alignItems:'center', marginBottom:'var(--sp-5)' }}>
+    <div className={overlay} onClick={e => e.target === e.currentTarget && onFechar()}>
+      <div className="modal-box" style={modal}>
+        <div className="modal-header">
           <h3 style={{ fontWeight:700, fontSize:'0.95rem' }}>
             {editando ? '✏️ Editar Simulado' : '➕ Novo Simulado'}
           </h3>
-          <button onClick={onFechar} style={{ background:'none', border:'none',
-            cursor:'pointer', fontSize:'0.95rem', color:'var(--text-secondary)' }}>✕</button>
+          <button onClick={onFechar} className="modal-close">✕</button>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -218,8 +208,8 @@ function ModalRealizar({ simulado, onFechar }) {
   }
 
   const overlay = {
-    position:'fixed', inset:0, background:'rgba(0,0,0,0.6)',
-    zIndex:300, display:'flex', alignItems:'flex-start',
+    position:'fixed', inset:0, background:'rgba(0,0,0,0.65)',
+    zIndex:300, display:'flex', alignItems:'center',
     justifyContent:'center', overflowY:'auto', padding:'var(--sp-4)'
   };
   const modal = {
@@ -229,8 +219,8 @@ function ModalRealizar({ simulado, onFechar }) {
   };
 
   return (
-    <div style={overlay} onClick={e => e.target === e.currentTarget && onFechar()}>
-      <div style={modal}>
+    <div className={overlay} onClick={e => e.target === e.currentTarget && onFechar()}>
+      <div className="modal-box" style={modal}>
         <div style={{ display:'flex', justifyContent:'space-between',
           alignItems:'center', marginBottom:'var(--sp-4)' }}>
           <div>

@@ -58,7 +58,6 @@ function ModalCurso({ curso, materias, onSalvar, onFechar }) {
   return (
     <div
       className="modal-overlay"
-      style={{ alignItems:'flex-start' }}
       onClick={e => e.target === e.currentTarget && onFechar()}
     >
       <div className="modal-box" style={{ maxWidth:640 }}>
