@@ -1,0 +1,109 @@
+Fluxo padrão para subir qualquer projeto no Docker Desktop via terminal
+
+# Entre na pasta do projeto: cd caminho/do/projeto
+1. Verificar se existe docker-compose.yml: ls
+
+# Iniciar o projeto: 
+docker compose up -d
+
+# Rebuildar o projeto
+
+# Muito comum após alterar código: 
+docker compose up -d --build
+
+# Ver containers ativos: docker ps
+
+# Ver logs do projeto:
+docker compose logs -f
+
+# Logs de um serviço específico: 
+docker compose logs -f backend
+
+# Derrubar tudo:
+docker compose down
+
+# Remover volumes: 
+docker compose down -v
+
+# Entrar dentro do container: 
+docker ps
+
+# Remover imagens antigas: 
+docker system prune -a
+
+# Fluxo mais usado no dia a dia:
+docker compose up -d --build
+docker ps
+docker compose logs -f
+
+
+Saia do .venv e suba o Docker:
+
+# Sair do virtualenv
+deactivate
+
+# Garantir que nenhuma porta esteja ocupada
+sudo fuser -k 8000/tcp 2>/dev/null
+sudo fuser -k 5173/tcp 2>/dev/null
+
+# Subir tudo pelo Docker
+cd ~/estudei-plataforma
+docker compose up
+
+docker compose up -d
+
+# O problema é que o docker compose está tentando usar o socket do Docker Desktop (~/.docker/desktop/docker.sock) em vez do socket do sistema (/run/docker.sock). Corrija apontando para o socket correto:
+
+export DOCKER_HOST=unix:///run/docker.sock
+
+docker compose up -d
+docker compose up --build -d
+
+
+# Testes da aplicação
+
+docker compose exec backend pytest tests/ -v
+
+# comandos para commit:
+
+# Verificar arquivos alterados
+git status
+
+# Adicionar todos os arquivos modificados
+git add .
+
+# Criar o commit
+git commit -m "Estudo Concursos"
+
+# Enviar para o repositório remoto
+git push origin nome-da-branch
+git add .
+git commit -m "Adiciona tela de metas e corrige navegação"
+git push origin main
+
+
+# Ver em qual branch você está
+git branch
+
+# Listar branches
+git branch -a
+
+# Trocar de branch
+git checkout nome-da-branch
+
+# Criar e trocar para uma nova branch
+git checkout -b minha-feature
+
+# Ver histórico de commits
+git log --oneline
+
+# Ver diferenças antes de commitar
+git diff
+
+git push -u origin nome-da-branch
+
+
+
+git add .
+git commit -m "Inserção do Keycloak"
+git push

@@ -10,6 +10,8 @@ import Notificacoes   from './pages/Notificacoes';
 import Cronometro     from './pages/Cronometro';
 import Questoes       from './pages/Questoes';
 import Simulados      from './pages/Simulados';
+import MeusCursos     from './pages/MeusCursos';
+import Relatorios     from './pages/Relatorios';
 import Layout         from './components/Layout';
 
 function RotaProtegida({ children }) {
@@ -40,6 +42,8 @@ export default function App() {
         <Route path="cronometro"      element={<Cronometro />} />
         <Route path="questoes"        element={<Questoes />} />
         <Route path="simulados"       element={<Simulados />} />
+        <Route path="meus-cursos"     element={<MeusCursos />} />
+        <Route path="relatorios"      element={<Relatorios />} />
         <Route path="notificacoes"    element={<Notificacoes />} />
       </Route>
 

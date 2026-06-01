@@ -20,7 +20,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-study_password}
       POSTGRES_DB: ${DB_NAME:-study_db}
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - "${DB_HOST_PORT:-5433}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init-db.sql:/docker-entrypoint-initdb.d/init.sql
@@ -57,7 +57,7 @@ services:
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
       NODE_ENV: ${NODE_ENV:-development}
     ports:
-      - "${BACKEND_PORT:-5000}:5000"
+      - "${BACKEND_PORT:-5010}:5010"
     volumes:
       - ./backend:/app          # Hot-reload do código
       - /app/node_modules       # Preservar node_modules do container

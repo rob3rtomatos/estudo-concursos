@@ -3,17 +3,18 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  optimizeDeps: {
+    include: ['jspdf', 'jspdf-autotable']
+  },
+  build: {
+    commonjsOptions: {
+      include: [/jspdf/, /jspdf-autotable/, /node_modules/]
+    }
+  },
   server: {
     host: '0.0.0.0',
     port: 3000,
-    proxy: {
-      '/api': {
-        target: 'http://backend:5000',
-        changeOrigin: true
-      }
-    }
-  },
-  css: {
-    postcss: './postcss.config.js'
+    watch: { usePolling: true },
+    historyApiFallback: true
   }
 });
