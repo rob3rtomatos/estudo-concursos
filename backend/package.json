@@ -4,30 +4,38 @@
   "description": "Backend API para plataforma de estudos para concursos públicos de TI",
   "main": "src/server.js",
   "scripts": {
-    "start":   "node src/server.js",
-    "dev":     "nodemon src/server.js",
-    "test":    "jest --runInBand --forceExit --detectOpenHandles",
-    "test:unit":        "jest tests/unit --runInBand --forceExit",
-    "test:integration": "jest tests/integration --runInBand --forceExit"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --runInBand --forceExit --detectOpenHandles",
+    "test:unit": "jest tests/unit --runInBand --forceExit",
+    "test:integration": "jest tests/integration --runInBand --forceExit",
+    "test:security": "jest tests/security --runInBand --forceExit"
   },
   "dependencies": {
-    "bcryptjs":          "^2.4.3",
-    "cors":              "^2.8.5",
-    "dotenv":            "^16.4.5",
-    "express":           "^4.18.3",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
     "express-validator": "^7.1.0",
-    "jsonwebtoken":      "^9.0.2",
-    "node-cron":         "^3.0.3",
-    "pg":                "^8.11.5",
-    "winston":           "^3.13.0"
+    "jsonwebtoken": "^9.0.2",
+    "node-cron": "^3.0.3",
+    "pg": "^8.11.5",
+    "winston": "^3.13.0"
   },
   "devDependencies": {
-    "jest":       "^29.7.0",
-    "nodemon":    "^3.1.0",
-    "supertest":  "^7.0.0"
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.0.0"
   },
   "jest": {
     "testEnvironment": "node",
-    "testPathPattern":  "tests/.*\\.test\\.js$"
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "globalSetup": "./tests/setup/globalSetup.js",
+    "setupFiles": [
+      "./tests/setup/setupEnv.js"
+    ],
+    "testTimeout": 30000
   }
 }

@@ -49,12 +49,30 @@ async function resumo(req, res) {
 
       safe(`
         SELECT m.nome AS materia, m.cor,
-               ROUND(SUM(r.horas_estudadas)::numeric,1) AS total_horas
-        FROM registro_estudo r
-        JOIN materias m ON m.id = r.materia_id
-        WHERE r.usuario_id=$1
-          AND r.data_estudo >= CURRENT_DATE - INTERVAL '29 days'
-        GROUP BY m.id, m.nome, m.cor
+               ROUND((
+                 COALESCE((
+                   SELECT SUM(r.horas_estudadas)
+                   FROM registro_estudo r
+                   WHERE r.materia_id = m.id
+                     AND r.usuario_id = $1
+                     AND r.data_estudo >= CURRENT_DATE - INTERVAL '29 days'
+                 ), 0)
+                 +
+                 COALESCE((
+                   SELECT SUM(s.duracao_seg) / 3600.0
+                   FROM sessoes_estudo s
+                   WHERE s.materia_id = m.id
+                     AND s.usuario_id = $1
+                     AND s.ativo = false
+                     AND s.iniciado_em >= CURRENT_DATE - INTERVAL '29 days'
+                 ), 0)
+               )::numeric, 1) AS total_horas
+        FROM materias m
+        WHERE m.id IN (
+          SELECT DISTINCT materia_id FROM registro_estudo WHERE usuario_id = $1
+          UNION
+          SELECT DISTINCT materia_id FROM sessoes_estudo WHERE usuario_id = $1 AND ativo = false
+        )
         ORDER BY total_horas DESC
       `, [uid]),
 
