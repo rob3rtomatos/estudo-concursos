@@ -54,7 +54,12 @@ docker compose up -d
 
 # O problema é que o docker compose está tentando usar o socket do Docker Desktop (~/.docker/desktop/docker.sock) em vez do socket do sistema (/run/docker.sock). Corrija apontando para o socket correto:
 
-export DOCKER_HOST=unix:///run/docker.sock
+git push origin ajustes-lay-out
+git add .
+git commit -m "107/107 testes ✅ — Estudo Concursos_v1!"
+git push origin mainexport 
+
+DOCKER_HOST=unix:///run/docker.sock
 
 docker compose up -d
 docker compose up --build -d
@@ -76,10 +81,7 @@ git add .
 git commit -m "Estudo Concursos_v1"
 
 # Enviar para o repositório remoto
-git push origin ajustes-lay-out
-git add .
-git commit -m "107/107 testes ✅ — Estudo Concursos_v1!"
-git push origin main
+g
 
 
 # Ver em qual branch você está
