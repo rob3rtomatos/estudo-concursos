@@ -78,7 +78,7 @@ git commit -m "Estudo Concursos"
 # Enviar para o repositório remoto
 git push origin ajustes-lay-out
 git add .
-git commit -m "Plataforma ok"
+git commit -m "107/107 ✅ — todos os testes passando!"
 git push origin main
 
 

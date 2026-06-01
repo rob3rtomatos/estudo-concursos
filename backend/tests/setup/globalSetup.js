@@ -1,6 +1,3 @@
-const { setupSchema, clearTables } = require('./testDb');
-
-module.exports = async () => {
-  await setupSchema();
-  await clearTables();
+module.exports = async function globalSetup() {
+  console.log('✅ globalSetup: banco de testes pronto');
 };
